@@ -5,6 +5,8 @@
  */
 package clientemail;
 
+import formularios.frmPantallaPrincipal;
+
 /**
  *
  * @author home
@@ -16,6 +18,7 @@ public class ClienteMail {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        frmPantallaPrincipal frm = new frmPantallaPrincipal();
+        frm.setVisible(true);
     }
-    
 }
