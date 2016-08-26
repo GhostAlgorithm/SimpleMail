@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package servidormail;
+import servidormail.formularios.*;
 
 /**
  *
@@ -15,7 +16,8 @@ public class ServidorMail {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Hola mundo");
+        frmPantallaPrincipal pantalla = new frmPantallaPrincipal();
+        pantalla.setVisible(true);
     }
     
 }
