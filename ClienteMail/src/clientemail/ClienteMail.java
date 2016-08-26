@@ -3,20 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servidormail;
-import servidormail.formularios.*;
+package clientemail;
 
 /**
  *
  * @author home
  */
-public class ServidorMail {
+public class ClienteMail {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        frmPantallaPrincipal pantalla = new frmPantallaPrincipal();
-        pantalla.setVisible(true);
+        // TODO code application logic here
     }
+    
 }
