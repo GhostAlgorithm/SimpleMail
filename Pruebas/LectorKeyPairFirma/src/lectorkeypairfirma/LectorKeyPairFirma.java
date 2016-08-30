@@ -68,12 +68,12 @@ public class LectorKeyPairFirma {
             sig.initSign(keyPair.getPrivate());
             String mensaje = "Mensaje que yo envie";
             byte[] data = mensaje.getBytes("UTF8");
+            sig.update(data);
             byte[] signatureBytes = sig.sign();
             FileOutputStream fos = new FileOutputStream(path + "/firma.sig");
             fos.write(signatureBytes);
             fos.close();
             System.out.println("Firma digital guardada con exito!");
-            
         } catch(Exception e){
             
         }
