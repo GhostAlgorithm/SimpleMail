@@ -266,6 +266,7 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "No se encontro el email de destino!!");
             }
         } catch(Exception e){
+            System.out.println("Error: " + e.toString());
         }
     }//GEN-LAST:event_btnEnviarCorreoActionPerformed
 

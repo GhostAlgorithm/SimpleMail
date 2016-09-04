@@ -8,6 +8,7 @@ package clientemail;
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.MessageDigest;
+import utilidades.ListaByte;
 
 /**
  *
@@ -23,28 +24,22 @@ public class ProtocoloMail {
     public final static int ENVIAR_CORREO = 3;
     
     public static byte[] crearMsgInicioSesion(String email, String password){
-        byte[] mensaje = new byte[1 + 1 + email.length() + 1 + 32];
+        //byte[] mensaje = new byte[1 + 1 + email.length() + 1 + 32];
+        ListaByte mensaje = new ListaByte();
         
         // Paso 1: Un mensaje de inciio de sesion , siempre tendra el ID de 1
-        mensaje[0] = (byte) INICIO_SESION;
+        mensaje.agregarByte((byte) INICIO_SESION);
         
         // Paso 2: El segundo parametro indica la cantidad de caracteres que posee
         // el email escrito
-        mensaje[1] = (byte) email.length();
+        mensaje.agregarByte((byte) email.length());
         
         // Paso 3: todo lo que sigue, son los caracteres que conforman el correo en si
-        int posicionArray = 2;
-        char[] charEmail = email.toCharArray();
-        
-        for (int i =0; i<charEmail.length; i++){
-            mensaje[posicionArray] = (byte) charEmail[i];
-            posicionArray++;
-        }
+        mensaje.agregarString(email);
         
         // Paso 4: el siguiente byte, corresponde al tamaño del hash MD5 de la contraseña
         // en este caso, para MD5 siendo siempre 32
-        mensaje[posicionArray] = 32;
-        posicionArray++;
+        mensaje.agregarByte((byte) 32);
         
         // Paso 5: los demas bytes, corresponden a los caracteres que conforman el hash MD5
         byte[] md5Hash = new byte[5];
@@ -53,173 +48,111 @@ public class ProtocoloMail {
             md5Hash = md.digest(password.getBytes());
         } catch(Exception e){
         }
-        char[] md5 = new BigInteger(1, md5Hash).toString(16).toCharArray();
+        String md5 = new BigInteger(1, md5Hash).toString(16);
+        mensaje.agregarString(md5);
         
-        for (int i=0; i<md5.length; i++){
-            mensaje[posicionArray] = (byte) md5[i];
-            posicionArray++;
-        }
-        
-        return mensaje;
+        return mensaje.getBytes();
     }
     
     public static byte[] crearMsgCompDestinatario(String email){
-        byte[] mensaje = new byte[1 + 1 + email.length()];
+        //byte[] mensaje = new byte[1 + 1 + email.length()];
+        ListaByte mensaje = new ListaByte();
         
         // Paso 1: Todo mensaje de compribar si el destinatario existe o no
         // tendra un ID de 5
-        mensaje[0] = (byte) BUSCAR_DESTINATARIO;
+        mensaje.agregarByte((byte) BUSCAR_DESTINATARIO);
         
         // Paso 2: el segundo byte indicara el tamaño en caracteres, del correo a buscar
-        mensaje[1] = (byte) email.length();
+        mensaje.agregarByte((byte) email.length());
         
         // paso 3: Lo demás del mensaje corresponde a los caracteres del email
-        int posicionArray = 2;
-        char[] emailChar = email.toCharArray();
+        mensaje.agregarString(email);
         
-        for (int i =0; i<emailChar.length; i++){
-            mensaje[posicionArray] = (byte) emailChar[i];
-            posicionArray++;
-        }
-        
-        return mensaje;
+        return mensaje.getBytes();
     }
     
     public static byte[] crearMsgEnvioCorreo(String remitente, String destinatario, String texto
                          , byte[] archivoData, String rutaLlavePrivada, String rutaLlavePublica){
         
-        byte[] tamanioTexto = BigInteger.valueOf(texto.length()).toByteArray();
-        int lenArchivoData = 0;
-        byte[] tamanioArchivoData = null;
-        int tamanioData = 0;
+        ListaByte bytes = new ListaByte();
+        ListaByte datosAFirmar = new ListaByte();
         
-        if (archivoData != null){
-            tamanioArchivoData =  BigInteger.valueOf(archivoData.length).toByteArray();
-            // El +1 ya que uno de los bytes representa el flag de su propio tamaño en bytes
-            lenArchivoData = tamanioArchivoData.length + 1;
-            tamanioData = archivoData.length;
-        }
-        
-        byte[] mensaje = new byte[1 + 1 + remitente.length() + 1 + destinatario.length()
-                                + 1 + tamanioTexto.length + texto.length() + 1 + lenArchivoData
-                                + tamanioData];
-        byte[] mensajeFinal = null;
-        
-        // Paso 1: Todo mensaje de envio de correo tendra el ID de 3
-        mensaje[0] = ENVIAR_CORREO;
+        // Paso 1: todo mensaje de envio de correo tendra el ID de 3
+        bytes.agregarByte((byte) ENVIAR_CORREO);
         
         // Paso 2: El siguiente byte representa la cantidad de caracteres que posee
         // el correo del remitente
-        mensaje[1] = (byte) remitente.length();
+        bytes.agregarByte((byte) remitente.length());
         
         // Paso 3: lo demas corresponde a los caracteres que conforman el correo
-        int posicionArray = 2;
-        char[] remitenteChar = remitente.toCharArray();
-        byte[] remitenteByte = new byte[remitenteChar.length];
+        bytes.agregarString(remitente);
+        datosAFirmar.agregarString(remitente);
         
-        for (int i=0; i<remitenteChar.length; i++){
-            remitenteByte[i] = (byte) remitenteChar[i];
-            mensaje[posicionArray] = remitenteByte[i];
-            posicionArray++;
+        // Paso 4: el siguiente byte representa la cantidad de caracteres que posee el
+        // correo del destinatario
+        bytes.agregarByte((byte) destinatario.length());
+        
+        // Paso 5: lo demas corresponde a los caracteres que conforman el correo
+        bytes.agregarString(destinatario);
+        datosAFirmar.agregarString(destinatario);
+        
+        // Paso 6: el siguiente byte indica el tamaño en bytes que posee el numero entero
+        // que representa el tamaño del texto
+        byte[] flagTamTexto = BigInteger.valueOf(texto.length()).toByteArray();
+        bytes.agregarByte((byte) flagTamTexto.length);
+        
+        // Paso 7: lo demas son los bytes que conforman el flag que determina el tamaño
+        // del texto
+        bytes.agregarArrayByte(flagTamTexto);
+        
+        // Paso 8: lo demas son los bytes del texto en si mismo
+        bytes.agregarString(texto);
+        datosAFirmar.agregarString(texto);
+        
+        // Paso 9: El siguiente byte es un flag, que indica si se ha adjuntado un
+        // archivo o no
+        if (archivoData != null){
+            bytes.agregarByte((byte) 1);
+        } else {
+            bytes.agregarByte((byte) 0);
         }
         
-        // Paso 4: el siguiente byte representa la cantidad de caracteres que posee
-        // el correo del destinatario
-       mensaje[posicionArray] = (byte) destinatario.length();
-       
-       // Paso 5: lo demas corresponde a los caracteres que confoman el correo
-       posicionArray++;
-       char[] destinatarioChar = destinatario.toCharArray();
-       byte[] destinatarioByte = new byte[destinatarioChar.length];
-       
-       for (int i=0; i<destinatarioChar.length; i++){
-           destinatarioByte[i] = (byte) destinatarioChar[i];
-           mensaje[posicionArray] = destinatarioByte[i];
-           posicionArray++;
-       }
-       
-       // Paso 6: el siguiente byte indica el tamaño en bytes que posee el numero entero
-       // que representa el tamaño del texto
-       mensaje[posicionArray] = (byte) tamanioTexto.length;
-       posicionArray++;
-       
-       // Paso 7: lo demas son los bytes en si que conforman el numero entero
-       for (int i=0; i<tamanioTexto.length; i++){
-           mensaje[posicionArray] = tamanioTexto[i];
-           posicionArray++;
-       }
-       
-       // Paso 8: Los demas bytes representan el texto en si del mensaje
-       char[] textoChar = texto.toCharArray();
-       byte[] textoByte = new byte[textoChar.length];
-       
-       for (int i=0; i<textoChar.length; i++){
-           textoByte[i] = (byte) textoChar[i];
-           mensaje[posicionArray] = textoByte[i];
-           posicionArray++;
-       }
-       
-       // Paso 9: El siguiente byte es un flag, que indica si se ha adjuntado un
-       // archivo o no
-       if (archivoData != null){
-           mensaje[posicionArray] = 1;
-       } else {
-           mensaje[posicionArray] = 0;
-       }
-       posicionArray++;
-       
-       // Paso 10: el siguiente byte indica el tamaño en bytes del numero que indica
-       // la cantidad de bytes que conforman el archivo
-       if (archivoData != null){
-           mensaje[posicionArray] = (byte) tamanioArchivoData.length;
-           posicionArray++;
-           
-           // Paso 11: los demas bytes corresponden a los bytes que representan el tamaño en
-           // bytes del archivo enviado
-           for (int i=0; i<tamanioArchivoData.length; i++){
-               mensaje[posicionArray] = tamanioArchivoData[i];
-               posicionArray++;
-           }
-           
-           // Paso 12: los demas bytes corresponden a los bytes que conforman el archivo
-           for (int i=0; i<archivoData.length; i++){
-               mensaje[posicionArray] = archivoData[i];
-               posicionArray++;
-           }
+        // Paso 10: el siguiente byte indica el tamaño en bytes del numero que indica
+        // la cantidad de bytes que conforman el archivo
+        if (archivoData != null){
+            byte[] flagTamDatos = BigInteger.valueOf(archivoData.length).toByteArray();
+            bytes.agregarByte((byte) flagTamDatos.length);
+            
+            // Paso 11: los demas bytes corresponden a los bytes que representan el tamaño en
+            // bytes del archivo enviado
+            bytes.agregarArrayByte(flagTamDatos);
+            
+            // Paso 12: los demas bytes corresponden a los bytes que conforman el archivo
+            bytes.agregarArrayByte(archivoData);
+            datosAFirmar.agregarArrayByte(archivoData);
         }
-       
+        
         // Paso 13: Teniendo toda la informacion necesaria, crear firma digital:
-        int tamDataAFirmar = remitenteByte.length + destinatarioByte.length + textoByte.length;
-        if (archivoData != null){
-            tamDataAFirmar += archivoData.length;
-        }
-        byte[] dataAFirmar = new byte[tamDataAFirmar];
-        
-        // Paso 14: Concatenar todos los array para en el array datos
-        System.arraycopy(remitenteByte, 0, dataAFirmar, 0, remitenteByte.length);
-        System.arraycopy(destinatarioByte, 0, dataAFirmar, remitenteByte.length, destinatarioByte.length);
-        System.arraycopy(textoByte, 0, dataAFirmar, (remitenteByte.length + destinatarioByte.length) , textoByte.length);
-        if (archivoData != null){
-            System.arraycopy(archivoData, 0, dataAFirmar,(remitenteByte.length + destinatarioByte.length + textoByte.length), archivoData.length);
-        }
-        
-        // Paso 15: obtener los bytes de la firma digital
+        byte[] data = datosAFirmar.getBytes();
         KeyPair llaves = FirmaDigital.cargarLlaves(rutaLlavePrivada, rutaLlavePublica);
-        byte[] firmaDigital = FirmaDigital.firmar(llaves, dataAFirmar);
+        byte[] firmaDigital = FirmaDigital.firmar(llaves, data);
         
-        System.out.println("Tamaño de los bytes de firma digital: " + firmaDigital.length);
-        System.out.println("Tamaño del archivo adjunto: " + tamanioData);
+        // Paso 14: El siguiente byte representa el tamaño en bytes que posee la firma digital
+        bytes.agregarByte((byte) firmaDigital.length);
         
-        // Paso 16: creando objeto de mensaje Final
+        // Paso 15: los demas bytes corresponden a los bytes de la firma digital
+        bytes.agregarArrayByte(firmaDigital);
+        
+        // Paso 16: obtener los bytes de la llave publica
         byte[] llavePublica = FirmaDigital.cargarLlavePublica(rutaLlavePublica);
         
-        mensajeFinal = new byte[mensaje.length + 1 + 128 + 1 + llavePublica.length];
-        System.arraycopy(mensaje, 0, mensajeFinal, 0, mensaje.length);
-        mensajeFinal[mensaje.length] = (byte) 128;
-        System.arraycopy(firmaDigital, 0, mensajeFinal, mensaje.length + 1, 128);
-        mensajeFinal[mensaje.length + 1 + 128] = (byte) llavePublica.length;
-        System.arraycopy(llavePublica, 0, mensajeFinal,(mensaje.length + 1 + 128 + 1) , llavePublica.length);
+        // Paso 17: el siguiente byte representa el tamaño en bytes, de la llave publica
+        bytes.agregarByte((byte) llavePublica.length);
         
-        return mensajeFinal;
+        // Paso 18: los demas bytes son los bytes de la llave publica
+        bytes.agregarArrayByte(llavePublica);
+        
+        System.out.println("El tamaño del mensaje es: " + bytes.getBytes().length);
+        return bytes.getBytes();
     }
 }

@@ -79,7 +79,7 @@ public class FirmaDigital {
             fis.read(encodedPublicKey);
 	    fis.close();
         } catch(Exception e){
-            
+            System.out.println("Error al leer llave publica: " + e.toString());
         }
         
         return encodedPublicKey;
