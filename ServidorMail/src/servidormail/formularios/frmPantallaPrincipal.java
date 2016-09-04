@@ -7,6 +7,7 @@ package servidormail.formularios;
 
 import clases.SocketServer;
 import clases.TablaHashEnlazadaUsuarios;
+import java.awt.EventQueue;
 import test.TestTablaUsuarios;
 
 /**
@@ -108,7 +109,7 @@ public class frmPantallaPrincipal extends javax.swing.JFrame {
     private void btnIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarActionPerformed
         // Desactivando boton para evitar que el usuario cree mas de un Socket Listener
         this.btnIniciar.setEnabled(false);
-        this.servidor = new SocketServer();
+        this.servidor = new SocketServer(this);
         this.agregarAccion("Iniciando servidor de correos en el puerto 9873..\n");
         
         // Iniciando instancia del servidor
@@ -167,6 +168,18 @@ public class frmPantallaPrincipal extends javax.swing.JFrame {
         String txt = this.txtLog.getText();
         txt += texto;
         this.txtLog.setText(txt);
+    }
+    
+    public void agregarAccionThread(final String texto){
+        final frmPantallaPrincipal padre = this;
+        
+        EventQueue.invokeLater(new Runnable(){
+            @Override
+            public void run(){
+                String textoFinal = padre.txtLog.getText() + texto;
+                padre.txtLog.setText(textoFinal);
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

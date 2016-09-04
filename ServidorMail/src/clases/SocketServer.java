@@ -8,6 +8,7 @@ package clases;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import servidormail.formularios.frmPantallaPrincipal;
 
 /**
  *
@@ -17,9 +18,11 @@ public class SocketServer extends Thread{
     private ServerSocket server;
     private boolean continuar = true;
     private ArrayList<ConexionCliente> clientes;
+    private frmPantallaPrincipal padre;
     
-    public SocketServer(){
+    public SocketServer(frmPantallaPrincipal padre){
         this.clientes = new ArrayList<ConexionCliente>();
+        this.padre = padre;
     }
     
     public void run(){
@@ -32,6 +35,7 @@ public class SocketServer extends Thread{
                 
                 // agregando conexion al arraylist
                 this.agregarCliente(con);
+                this.padre.agregarAccionThread("Un nuevo usuario ha iniciado conexion!\n");
             }
         } catch(Exception e){
         }
