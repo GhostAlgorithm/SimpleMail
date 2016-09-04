@@ -16,7 +16,7 @@ import test.TestTablaUsuarios;
  */
 public class frmPantallaPrincipal extends javax.swing.JFrame {
     private SocketServer servidor;
-    private TablaHashEnlazadaUsuarios tablaUsuarios;
+    public TablaHashEnlazadaUsuarios tablaUsuarios;
 
     /**
      * Creates new form frmPantallaPrincipal

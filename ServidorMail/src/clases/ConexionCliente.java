@@ -9,7 +9,9 @@ import clases.protocolomail.MensajeInicioSesion;
 import clases.protocolomail.ProtocoloMail;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.Socket;
+import servidormail.formularios.frmPantallaPrincipal;
 
 /**
  *
@@ -19,8 +21,11 @@ public class ConexionCliente extends Thread {
     private Socket cliente;
     private boolean continuar = true;
     private InputStream entrada;
+    private OutputStream salida;
+    private frmPantallaPrincipal padre;
     
-    public ConexionCliente(Socket cliente){
+    public ConexionCliente(frmPantallaPrincipal padre, Socket cliente){
+        this.padre = padre;
         this.setCliente(cliente);
     }
     
@@ -40,15 +45,30 @@ public class ConexionCliente extends Thread {
         System.out.println("Ejecutando Thread del cliente");
         try {
             entrada = cliente.getInputStream();
+            salida = cliente.getOutputStream();
+            
             while (this.getContinuar()){
                 byte ID = (byte) entrada.read();
                 
                 switch(ID){
                     case 1:
                         MensajeInicioSesion msj = ProtocoloMail.procesarInicioSesion(entrada);
+                        
                         System.out.println("Mensaje Inicio de sesion: ");
                         System.out.println("Email: " + msj.getEmail());
                         System.out.println("Password: " + msj.getPassword());
+                        
+                        ElementoListaUsuarios usuario = this.padre.tablaUsuarios.buscarUsuario(msj.getEmail());
+                        
+                        if (usuario != null){
+                            if (usuario.getUsuario().getPassword().equals(msj.getPassword())){
+                                salida.write(ProtocoloMail.SESION_ACEPTADA);
+                            } else {
+                                salida.write(ProtocoloMail.SESION_RECHAZADA);
+                            }
+                        } else {
+                            salida.write(ProtocoloMail.SESION_RECHAZADA);
+                        }
                         break;
                     default:
                         System.out.println("Error al leer id, se ha leido id desconocido de: " + ID);
@@ -57,6 +77,7 @@ public class ConexionCliente extends Thread {
             }
         } catch(Exception e){
             System.out.println("Error al leer datos!!!");
+            System.out.println("" + e.toString());
         }
     }
 }

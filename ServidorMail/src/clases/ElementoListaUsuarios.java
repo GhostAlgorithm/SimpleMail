@@ -14,7 +14,7 @@ public class ElementoListaUsuarios {
     private ElementoListaUsuarios siguiente;
     
     public ElementoListaUsuarios(Usuario usuario){
-        
+        this.setUsuario(usuario);
     }
     
     public void setUsuario(Usuario usuario){

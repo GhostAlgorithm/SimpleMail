@@ -6,8 +6,10 @@
 package formularios;
 
 import clientemail.ProtocoloMail;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -112,7 +114,7 @@ public class frmLogin extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        //btnLogin.setEnabled(false);
+        btnLogin.setEnabled(false);
         String email = txtMail.getText();
         String password = String.valueOf(txtPassword.getPassword());
         
@@ -123,6 +125,16 @@ public class frmLogin extends javax.swing.JFrame {
             OutputStream salida = clienteSocket.getOutputStream();
             salida.write(inicioSesion);
             salida.flush();
+            
+            InputStream entrada = clienteSocket.getInputStream();
+            byte ID = (byte) entrada.read();
+            
+            if (ID == ProtocoloMail.SESION_ACEPTADA){
+                JOptionPane.showMessageDialog(this, "Sesion iniciada con exito!!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraeña no validos!");
+                btnLogin.setEnabled(true);
+            }
         } catch(Exception e){
             
         }

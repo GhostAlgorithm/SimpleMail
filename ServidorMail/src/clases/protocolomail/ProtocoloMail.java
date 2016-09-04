@@ -13,6 +13,10 @@ import java.math.BigInteger;
  * @author home
  */
 public class ProtocoloMail {
+    public static int INICIO_SESION = 1;
+    public static int SESION_ACEPTADA = 65;
+    public static int SESION_RECHAZADA = 127;
+    
     public static MensajeInicioSesion procesarInicioSesion(InputStream entrada) throws Exception{
         MensajeInicioSesion msj = new MensajeInicioSesion();
         

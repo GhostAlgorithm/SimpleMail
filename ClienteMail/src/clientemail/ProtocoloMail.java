@@ -13,11 +13,15 @@ import java.security.MessageDigest;
  * @author home
  */
 public class ProtocoloMail {
+    public static int INICIO_SESION = 1;
+    public static int SESION_ACEPTADA = 65;
+    public static int SESION_RECHAZADA = 127;
+    
     public static byte[] crearMsgInicioSesion(String email, String password){
         byte[] mensaje = new byte[1 + 1 + email.length() + 1 + 32];
         
         // Paso 1: Un mensaje de inciio de sesion , siempre tendra el ID de 1
-        mensaje[0] = 1;
+        mensaje[0] = (byte) INICIO_SESION;
         
         // Paso 2: El segundo parametro indica la cantidad de caracteres que posee
         // el email escrito

@@ -30,7 +30,7 @@ public class SocketServer extends Thread{
             this.server = new ServerSocket(9873);
             while (this.continuar){
                 Socket cliente = this.server.accept();
-                ConexionCliente con = new ConexionCliente(cliente);
+                ConexionCliente con = new ConexionCliente(this.padre, cliente);
                 con.start();
                 
                 // agregando conexion al arraylist
