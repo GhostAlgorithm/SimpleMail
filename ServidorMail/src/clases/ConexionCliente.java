@@ -5,6 +5,10 @@
  */
 package clases;
 
+import clases.protocolomail.MensajeInicioSesion;
+import clases.protocolomail.ProtocoloMail;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Socket;
 
 /**
@@ -14,6 +18,7 @@ import java.net.Socket;
 public class ConexionCliente extends Thread {
     private Socket cliente;
     private boolean continuar = true;
+    private InputStream entrada;
     
     public ConexionCliente(Socket cliente){
         this.setCliente(cliente);
@@ -32,8 +37,26 @@ public class ConexionCliente extends Thread {
     }
     
     public void run(){
-        while (this.getContinuar()){
-            
+        System.out.println("Ejecutando Thread del cliente");
+        try {
+            entrada = cliente.getInputStream();
+            while (this.getContinuar()){
+                byte ID = (byte) entrada.read();
+                
+                switch(ID){
+                    case 1:
+                        MensajeInicioSesion msj = ProtocoloMail.procesarInicioSesion(entrada);
+                        System.out.println("Mensaje Inicio de sesion: ");
+                        System.out.println("Email: " + msj.getEmail());
+                        System.out.println("Password: " + msj.getPassword());
+                        break;
+                    default:
+                        System.out.println("Error al leer id, se ha leido id desconocido de: " + ID);
+                        break;
+                }
+            }
+        } catch(Exception e){
+            System.out.println("Error al leer datos!!!");
         }
     }
 }

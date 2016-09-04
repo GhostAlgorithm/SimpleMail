@@ -5,6 +5,7 @@
  */
 package clientemail;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 
 /**
@@ -40,12 +41,13 @@ public class ProtocoloMail {
         byte[] md5Hash = new byte[5];
         try{
             MessageDigest md = MessageDigest.getInstance("MD5");
-            md5Hash = md.digest(password.getBytes("UTF8"));
+            md5Hash = md.digest(password.getBytes());
         } catch(Exception e){
         }
+        char[] md5 = new BigInteger(1, md5Hash).toString(16).toCharArray();
         
-        for (int i=0; i<md5Hash.length; i++){
-            mensaje[posicionArray] = md5Hash[i];
+        for (int i=0; i<md5.length; i++){
+            mensaje[posicionArray] = (byte) md5[i];
             posicionArray++;
         }
         
