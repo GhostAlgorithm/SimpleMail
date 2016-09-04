@@ -40,8 +40,19 @@ public class ConexionCliente extends Thread {
         return this.continuar;
     }
     
+    public boolean chequearLogin(ElementoListaUsuarios usuario, MensajeInicioSesion msj){
+        if (usuario != null){
+            if (usuario.getUsuario().getPassword().equals(msj.getPassword())){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    
     public void run(){
-        System.out.println("Ejecutando Thread del cliente");
         try {
             entrada = cliente.getInputStream();
             salida = cliente.getOutputStream();
@@ -53,13 +64,8 @@ public class ConexionCliente extends Thread {
                     case 1:
                         MensajeInicioSesion msj = ProtocoloMail.procesarInicioSesion(entrada);
                         ElementoListaUsuarios usuario = this.padre.tablaUsuarios.buscarUsuario(msj.getEmail());
-                        
-                        if (usuario != null){
-                            if (usuario.getUsuario().getPassword().equals(msj.getPassword())){
-                                salida.write(ProtocoloMail.SESION_ACEPTADA);
-                            } else {
-                                salida.write(ProtocoloMail.SESION_RECHAZADA);
-                            }
+                        if (chequearLogin(usuario, msj)){
+                            salida.write(ProtocoloMail.SESION_ACEPTADA);
                         } else {
                             salida.write(ProtocoloMail.SESION_RECHAZADA);
                         }
