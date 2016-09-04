@@ -6,6 +6,8 @@
 package servidormail.formularios;
 
 import clases.SocketServer;
+import clases.TablaHashEnlazadaUsuarios;
+import test.TestTablaUsuarios;
 
 /**
  *
@@ -13,6 +15,7 @@ import clases.SocketServer;
  */
 public class frmPantallaPrincipal extends javax.swing.JFrame {
     private SocketServer servidor;
+    private TablaHashEnlazadaUsuarios tablaUsuarios;
 
     /**
      * Creates new form frmPantallaPrincipal
@@ -112,6 +115,9 @@ public class frmPantallaPrincipal extends javax.swing.JFrame {
         this.servidor.start();
         this.agregarAccion("Servidor iniciado con exito, esperando clientes\n");
         this.btnDetener.setEnabled(true);
+        
+        // Creando tabla de usuarios de prueba
+        this.tablaUsuarios = TestTablaUsuarios.crearTablaPrueba();
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void btnDetenerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerActionPerformed

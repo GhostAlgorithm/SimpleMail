@@ -13,8 +13,9 @@ public class Usuario {
     private String correo;
     private String password;
     
-    public Usuario(){
-        
+    public Usuario(String correo, String password){
+        this.setCorreo(correo);
+        this.setPassword(password);
     }
     
     public void setCorreo(String correo){
