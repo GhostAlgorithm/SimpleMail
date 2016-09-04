@@ -15,6 +15,7 @@ public class MensajeEnviarCorreo {
     private String mensaje;
     private boolean hayAdjunto = false;
     private byte[] datos = new byte[1];
+    private byte[] firmaDigital = new byte[1];
     
     public MensajeEnviarCorreo(){
     }
@@ -57,5 +58,13 @@ public class MensajeEnviarCorreo {
     
     public byte[] getDatos(){
         return this.datos;
+    }
+    
+    public void setFirmaDigital(byte[] firma){
+        this.firmaDigital = firma;
+    }
+    
+    public byte[] getFirmaDigital(){
+        return this.firmaDigital;
     }
 }

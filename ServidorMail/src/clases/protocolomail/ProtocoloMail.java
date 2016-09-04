@@ -129,6 +129,14 @@ public class ProtocoloMail {
             msj.setDatos(datos);
         }
         
+        // Paso 9: el siguiente flag indica el tamaño en bytes de la firma
+        int tamFirma = entrada.read();
+        byte[] firmaDigital = new byte[tamFirma];
+        for (int i=0; i<tamFirma; i++){
+            firmaDigital[i] = (byte) entrada.read();
+        }
+        msj.setFirmaDigital(firmaDigital);
+        
         return msj;
     }
 }

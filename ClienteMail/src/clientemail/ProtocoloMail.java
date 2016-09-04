@@ -6,6 +6,7 @@
 package clientemail;
 
 import java.math.BigInteger;
+import java.security.KeyPair;
 import java.security.MessageDigest;
 
 /**
@@ -85,7 +86,7 @@ public class ProtocoloMail {
     }
     
     public static byte[] crearMsgEnvioCorreo(String remitente, String destinatario, String texto
-                         , byte[] archivoData){
+                         , byte[] archivoData, String rutaLlavePrivada, String rutaLlavePublica){
         
         byte[] tamanioTexto = BigInteger.valueOf(texto.length()).toByteArray();
         int lenArchivoData = 0;
@@ -102,6 +103,7 @@ public class ProtocoloMail {
         byte[] mensaje = new byte[1 + 1 + remitente.length() + 1 + destinatario.length()
                                 + 1 + tamanioTexto.length + texto.length() + 1 + lenArchivoData
                                 + tamanioData];
+        byte[] mensajeFinal = null;
         
         // Paso 1: Todo mensaje de envio de correo tendra el ID de 3
         mensaje[0] = ENVIAR_CORREO;
@@ -184,10 +186,36 @@ public class ProtocoloMail {
                mensaje[posicionArray] = archivoData[i];
                posicionArray++;
            }
-       }
+        }
        
+        // Paso 13: Teniendo toda la informacion necesaria, crear firma digital:
+        int tamDataAFirmar = remitenteByte.length + destinatarioByte.length + textoByte.length;
+        if (archivoData != null){
+            tamDataAFirmar += archivoData.length;
+        }
+        byte[] dataAFirmar = new byte[tamDataAFirmar];
+        
+        // Paso 14: Concatenar todos los array para en el array datos
+        System.arraycopy(remitenteByte, 0, dataAFirmar, 0, remitenteByte.length);
+        System.arraycopy(destinatarioByte, 0, dataAFirmar, remitenteByte.length, destinatarioByte.length);
+        System.arraycopy(textoByte, 0, dataAFirmar, (remitenteByte.length + destinatarioByte.length) , textoByte.length);
+        if (archivoData != null){
+            System.arraycopy(archivoData, 0, dataAFirmar,(remitenteByte.length + destinatarioByte.length + textoByte.length), archivoData.length);
+        }
+        
+        // Paso 15: obtener los bytes de la firma digital
+        KeyPair llaves = FirmaDigital.cargarLlaves(rutaLlavePrivada, rutaLlavePublica);
+        byte[] firmaDigital = FirmaDigital.firmar(llaves, dataAFirmar);
+        
+        System.out.println("Tamaño de los bytes de firma digital: " + firmaDigital.length);
         System.out.println("Tamaño del archivo adjunto: " + tamanioData);
         
-       return mensaje;
+        // Paso 16: creando objeto de mensaje Final
+        mensajeFinal = new byte[mensaje.length + 1 + 128];
+        System.arraycopy(mensaje, 0, mensajeFinal, 0, mensaje.length);
+        mensajeFinal[mensaje.length] = (byte) 128;
+        System.arraycopy(firmaDigital, 0, mensajeFinal, mensaje.length + 1, 128);
+        
+        return mensajeFinal;
     }
 }
