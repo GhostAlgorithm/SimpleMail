@@ -65,6 +65,12 @@ public class ConexionCliente extends Thread {
         return false;
     }
     
+    public boolean procesarCorreo(MensajeEnviarCorreo msj){
+        boolean resultado = false;
+        
+        return resultado;
+    }
+    
     public void run(){
         try {
             entrada = cliente.getInputStream();
@@ -98,6 +104,11 @@ public class ConexionCliente extends Thread {
                         System.out.println("Tamaño de adjunto: " + msj3.getDatos().length);
                         System.out.println("Tamaño de bytes de firma: " + msj3.getFirmaDigital().length);
                         System.out.println("Tamaño de bytes de llave: " + msj3.getLlavePublica().length);
+                        if (this.procesarCorreo(msj3)){
+                            
+                        } else {
+                            
+                        }
                         break;
                     case -1:
                         this.setContinuar(false);
