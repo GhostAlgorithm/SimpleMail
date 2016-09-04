@@ -316,6 +316,7 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
         }
         
         byte[] data = ProtocoloMail.crearMsgEnvioCorreo(remitente, destinatario, mensaje, archivoData);
+        salida.write(data);
     }
     
     public void setConexion(Socket cliente){

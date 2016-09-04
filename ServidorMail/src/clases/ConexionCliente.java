@@ -6,6 +6,7 @@
 package clases;
 
 import clases.protocolomail.MensajeComprobarDestinatario;
+import clases.protocolomail.MensajeEnviarCorreo;
 import clases.protocolomail.MensajeInicioSesion;
 import clases.protocolomail.ProtocoloMail;
 import java.io.InputStream;
@@ -88,6 +89,13 @@ public class ConexionCliente extends Thread {
                         } else {
                             salida.write(ProtocoloMail.DESTINATARIO_DESCONOCIDO);
                         }
+                        break;
+                    case ProtocoloMail.ENVIAR_CORREO:
+                        MensajeEnviarCorreo msj3 = ProtocoloMail.procesarEnvioCorreo(entrada);
+                        System.out.println("Remitente: " + msj3.getRemitente());
+                        System.out.println("Destinatario: " + msj3.getDestinatario());
+                        System.out.println("Mensaje: " + msj3.getMensaje());
+                        System.out.println("Tamaño de adjunto: " + msj3.getDatos().length);
                         break;
                     case -1:
                         this.setContinuar(false);

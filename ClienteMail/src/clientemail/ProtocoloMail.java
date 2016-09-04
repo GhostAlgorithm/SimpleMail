@@ -185,6 +185,8 @@ public class ProtocoloMail {
                posicionArray++;
            }
        }
+       
+        System.out.println("Tamaño del archivo adjunto: " + tamanioData);
         
        return mensaje;
     }
