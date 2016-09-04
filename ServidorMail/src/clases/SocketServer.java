@@ -7,6 +7,7 @@ package clases;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,9 +16,10 @@ import java.net.Socket;
 public class SocketServer extends Thread{
     private ServerSocket server;
     private boolean continuar = true;
+    private ArrayList<ConexionCliente> clientes;
     
     public SocketServer(){
-        
+        this.clientes = new ArrayList<ConexionCliente>();
     }
     
     public void run(){
@@ -25,6 +27,11 @@ public class SocketServer extends Thread{
             this.server = new ServerSocket(9873);
             while (this.continuar){
                 Socket cliente = this.server.accept();
+                ConexionCliente con = new ConexionCliente(cliente);
+                con.start();
+                
+                // agregando conexion al arraylist
+                this.agregarCliente(con);
             }
         } catch(Exception e){
         }
@@ -37,5 +44,9 @@ public class SocketServer extends Thread{
         } catch(Exception e){
             
         }
+    }
+    
+    public void agregarCliente(ConexionCliente cliente){
+        this.clientes.add(cliente);
     }
 }
