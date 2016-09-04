@@ -5,6 +5,7 @@
  */
 package clases;
 
+import clases.protocolomail.MensajeComprobarDestinatario;
 import clases.protocolomail.MensajeInicioSesion;
 import clases.protocolomail.ProtocoloMail;
 import java.io.InputStream;
@@ -40,7 +41,9 @@ public class ConexionCliente extends Thread {
         return this.continuar;
     }
     
-    public boolean chequearLogin(ElementoListaUsuarios usuario, MensajeInicioSesion msj){
+    public boolean chequearLogin(MensajeInicioSesion msj){
+        ElementoListaUsuarios usuario = this.padre.tablaUsuarios.buscarUsuario(msj.getEmail());
+                
         if (usuario != null){
             if (usuario.getUsuario().getPassword().equals(msj.getPassword())){
                 return true;
@@ -52,23 +55,43 @@ public class ConexionCliente extends Thread {
         }
     }
     
+    public boolean buscarDestinatario(MensajeComprobarDestinatario msj){
+        ElementoListaUsuarios usuario = this.padre.tablaUsuarios.buscarUsuario(msj.getEmail());
+        
+        if (usuario != null){
+            return true;
+        }
+        return false;
+    }
+    
     public void run(){
         try {
             entrada = cliente.getInputStream();
             salida = cliente.getOutputStream();
             
             while (this.getContinuar()){
-                byte ID = (byte) entrada.read();
+                int ID = entrada.read();
                 
                 switch(ID){
-                    case 1:
+                    case ProtocoloMail.INICIO_SESION:
                         MensajeInicioSesion msj = ProtocoloMail.procesarInicioSesion(entrada);
-                        ElementoListaUsuarios usuario = this.padre.tablaUsuarios.buscarUsuario(msj.getEmail());
-                        if (chequearLogin(usuario, msj)){
+                        if (chequearLogin(msj)){
                             salida.write(ProtocoloMail.SESION_ACEPTADA);
                         } else {
                             salida.write(ProtocoloMail.SESION_RECHAZADA);
                         }
+                        break;
+                    case ProtocoloMail.BUSCAR_DESTINATARIO:
+                        MensajeComprobarDestinatario msj2 = ProtocoloMail.procesarCompDestinatario(entrada);
+                        if (this.buscarDestinatario(msj2)){
+                            salida.write(ProtocoloMail.DESTINATARIO_ENCONTRADO);
+                        } else {
+                            salida.write(ProtocoloMail.DESTINATARIO_DESCONOCIDO);
+                        }
+                        break;
+                    case -1:
+                        this.setContinuar(false);
+                        this.cliente.close();
                         break;
                     default:
                         System.out.println("Error al leer id, se ha leido id desconocido de: " + ID);

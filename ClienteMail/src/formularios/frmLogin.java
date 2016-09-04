@@ -135,6 +135,7 @@ public class frmLogin extends javax.swing.JFrame {
                 menu.setPadre(this);
                 
                 menu.setVisible(true);
+                this.btnLogin.setEnabled(true);
                 this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraeña no validos!");

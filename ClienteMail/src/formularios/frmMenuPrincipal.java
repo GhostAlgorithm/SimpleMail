@@ -51,6 +51,11 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         });
 
         btnRedactarCorreo.setText("Redactar Coreo");
+        btnRedactarCorreo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRedactarCorreoActionPerformed(evt);
+            }
+        });
 
         btnCerrarSesion.setText("Cerrar Sesion");
         btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
@@ -103,6 +108,16 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         this.padre.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void btnRedactarCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRedactarCorreoActionPerformed
+        // TODO add your handling code here:
+        frmEnviarCorreo enviar = new frmEnviarCorreo();
+        enviar.setConexion(cliente);
+        enviar.setPadre(this);
+        
+        enviar.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnRedactarCorreoActionPerformed
 
     public void setConexion(Socket cliente){
         this.cliente = cliente;
