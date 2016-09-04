@@ -211,10 +211,14 @@ public class ProtocoloMail {
         System.out.println("Tamaño del archivo adjunto: " + tamanioData);
         
         // Paso 16: creando objeto de mensaje Final
-        mensajeFinal = new byte[mensaje.length + 1 + 128];
+        byte[] llavePublica = FirmaDigital.cargarLlavePublica(rutaLlavePublica);
+        
+        mensajeFinal = new byte[mensaje.length + 1 + 128 + 1 + llavePublica.length];
         System.arraycopy(mensaje, 0, mensajeFinal, 0, mensaje.length);
         mensajeFinal[mensaje.length] = (byte) 128;
         System.arraycopy(firmaDigital, 0, mensajeFinal, mensaje.length + 1, 128);
+        mensajeFinal[mensaje.length + 1 + 128] = (byte) llavePublica.length;
+        System.arraycopy(llavePublica, 0, mensajeFinal,(mensaje.length + 1 + 128 + 1) , llavePublica.length);
         
         return mensajeFinal;
     }

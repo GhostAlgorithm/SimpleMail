@@ -16,6 +16,7 @@ public class MensajeEnviarCorreo {
     private boolean hayAdjunto = false;
     private byte[] datos = new byte[1];
     private byte[] firmaDigital = new byte[1];
+    private byte[] llavePublica = new byte[1];
     
     public MensajeEnviarCorreo(){
     }
@@ -66,5 +67,13 @@ public class MensajeEnviarCorreo {
     
     public byte[] getFirmaDigital(){
         return this.firmaDigital;
+    }
+    
+    public void setLlavePublica(byte[] llave){
+        this.llavePublica = llave;
+    }
+    
+    public byte[] getLlavePublica(){
+        return this.llavePublica;
     }
 }

@@ -68,4 +68,20 @@ public class FirmaDigital {
         
         return signatureBytes;
     }
+    
+    public static byte[] cargarLlavePublica(String rutaLlavePublica){
+        byte[] encodedPublicKey = null;
+        
+        try {
+            File filePublicKey = new File(rutaLlavePublica);
+            FileInputStream fis = new FileInputStream(rutaLlavePublica);
+            encodedPublicKey = new byte[(int) filePublicKey.length()];
+            fis.read(encodedPublicKey);
+	    fis.close();
+        } catch(Exception e){
+            
+        }
+        
+        return encodedPublicKey;
+    }
 }

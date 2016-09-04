@@ -137,6 +137,14 @@ public class ProtocoloMail {
         }
         msj.setFirmaDigital(firmaDigital);
         
+        // Paso 10: el siguiente flag indica el tamaño en bytes de la llave publica
+        int tamLlave = entrada.read();
+        byte[] llavePublica = new byte[tamLlave];
+        for (int i=0; i<tamLlave; i++){
+            llavePublica[i] = (byte) entrada.read();
+        }
+        msj.setLlavePublica(llavePublica);
+        
         return msj;
     }
 }

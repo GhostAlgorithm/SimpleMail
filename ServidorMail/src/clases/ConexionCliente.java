@@ -97,6 +97,7 @@ public class ConexionCliente extends Thread {
                         System.out.println("Mensaje: " + msj3.getMensaje());
                         System.out.println("Tamaño de adjunto: " + msj3.getDatos().length);
                         System.out.println("Tamaño de bytes de firma: " + msj3.getFirmaDigital().length);
+                        System.out.println("Tamaño de bytes de llave: " + msj3.getLlavePublica().length);
                         break;
                     case -1:
                         this.setContinuar(false);
