@@ -84,11 +84,24 @@ public class ProtocoloMail {
         return mensaje;
     }
     
-    public static byte[] crearMsgEnvioCorreo(String remitente, String destinatario, String texto){
+    public static byte[] crearMsgEnvioCorreo(String remitente, String destinatario, String texto
+                         , byte[] archivoData){
+        
         byte[] tamanioTexto = BigInteger.valueOf(texto.length()).toByteArray();
+        int lenArchivoData = 0;
+        byte[] tamanioArchivoData = null;
+        int tamanioData = 0;
+        
+        if (archivoData != null){
+            tamanioArchivoData =  BigInteger.valueOf(archivoData.length).toByteArray();
+            // El +1 ya que uno de los bytes representa el flag de su propio tamaño en bytes
+            lenArchivoData = tamanioArchivoData.length + 1;
+            tamanioData = archivoData.length;
+        }
         
         byte[] mensaje = new byte[1 + 1 + remitente.length() + 1 + destinatario.length()
-                                + 1 + tamanioTexto.length + texto.length()];
+                                + 1 + tamanioTexto.length + texto.length() + 1 + lenArchivoData
+                                + tamanioData];
         
         // Paso 1: Todo mensaje de envio de correo tendra el ID de 3
         mensaje[0] = ENVIAR_CORREO;
@@ -144,6 +157,34 @@ public class ProtocoloMail {
            posicionArray++;
        }
        
+       // Paso 9: El siguiente byte es un flag, que indica si se ha adjuntado un
+       // archivo o no
+       if (archivoData != null){
+           mensaje[posicionArray] = 1;
+       } else {
+           mensaje[posicionArray] = 0;
+       }
+       posicionArray++;
+       
+       // Paso 10: el siguiente byte indica el tamaño en bytes del numero que indica
+       // la cantidad de bytes que conforman el archivo
+       if (archivoData != null){
+           mensaje[posicionArray] = (byte) tamanioArchivoData.length;
+           posicionArray++;
+           
+           // Paso 11: los demas bytes corresponden a los bytes que representan el tamaño en
+           // bytes del archivo enviado
+           for (int i=0; i<tamanioArchivoData.length; i++){
+               mensaje[posicionArray] = tamanioArchivoData[i];
+               posicionArray++;
+           }
+           
+           // Paso 12: los demas bytes corresponden a los bytes que conforman el archivo
+           for (int i=0; i<archivoData.length; i++){
+               mensaje[posicionArray] = archivoData[i];
+               posicionArray++;
+           }
+       }
         
        return mensaje;
     }
