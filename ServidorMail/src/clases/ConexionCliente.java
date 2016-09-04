@@ -66,8 +66,14 @@ public class ConexionCliente extends Thread {
     }
     
     public boolean procesarCorreo(MensajeEnviarCorreo msj){
-        boolean resultado = false;
+        System.out.println("Remitente: " + msj.getRemitente());
+        System.out.println("Destinatario: " + msj.getDestinatario());
+        System.out.println("Mensaje: " + msj.getMensaje());
+        System.out.println("Tamaño de adjunto: " + msj.getDatos().length);
+        System.out.println("Tamaño de bytes de firma: " + msj.getFirmaDigital().length);
+        System.out.println("Tamaño de bytes de llave: " + msj.getLlavePublica().length);
         
+        boolean resultado = false;
         return resultado;
     }
     
@@ -98,12 +104,6 @@ public class ConexionCliente extends Thread {
                         break;
                     case ProtocoloMail.ENVIAR_CORREO:
                         MensajeEnviarCorreo msj3 = ProtocoloMail.procesarEnvioCorreo(entrada);
-                        System.out.println("Remitente: " + msj3.getRemitente());
-                        System.out.println("Destinatario: " + msj3.getDestinatario());
-                        System.out.println("Mensaje: " + msj3.getMensaje());
-                        System.out.println("Tamaño de adjunto: " + msj3.getDatos().length);
-                        System.out.println("Tamaño de bytes de firma: " + msj3.getFirmaDigital().length);
-                        System.out.println("Tamaño de bytes de llave: " + msj3.getLlavePublica().length);
                         if (this.procesarCorreo(msj3)){
                             
                         } else {

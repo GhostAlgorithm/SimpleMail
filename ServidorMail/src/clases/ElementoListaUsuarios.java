@@ -11,7 +11,7 @@ package clases;
  */
 public class ElementoListaUsuarios {
     private Usuario usuario;
-    private ElementoListaUsuarios siguiente;
+    private ElementoListaUsuarios siguiente = null;
     
     public ElementoListaUsuarios(Usuario usuario){
         this.setUsuario(usuario);
