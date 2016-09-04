@@ -8,9 +8,12 @@ package formularios;
 import clientemail.ProtocoloMail;
 import javax.swing.JFileChooser;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javax.swing.JOptionPane;
 
 /**
@@ -25,6 +28,7 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
     private frmMenuPrincipal padre;
     private InputStream entrada;
     private OutputStream salida;
+    private String emailUsuario;
 
     /**
      * Creates new form frmPantallaPrincipal
@@ -249,6 +253,7 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
     private void btnEnviarCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarCorreoActionPerformed
         // TODO add your handling code here:
         String destinatario = txtDestinatario.getText();
+        
         byte[] mensaje = ProtocoloMail.crearMsgCompDestinatario(destinatario);
         
         try {
@@ -256,7 +261,7 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
             int ID = this.entrada.read();
             
             if (ID == ProtocoloMail.DESTINATARIO_ENCONTRADO){
-                JOptionPane.showMessageDialog(this, "Se encontro el email de destino");
+                this.enviarCorreo();
             } else if (ID == ProtocoloMail.DESTINATARIO_DESCONOCIDO) {
                 JOptionPane.showMessageDialog(this, "No se encontro el email de destino!!");
             }
@@ -296,6 +301,23 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAbrirLlavePublicaActionPerformed
 
+    public void enviarCorreo() throws Exception{
+        String destinatario = txtDestinatario.getText();
+        String remitente = emailUsuario;
+        String mensaje = this.txtCorreo.getText();
+        String rutaArchivo = this.txtRutaArchivo.getText();
+        byte[] archivoData = null;
+        String rutaLlavePrivada = this.txtRutaLlavePrivada.getText();
+        String rutaLlavePublica = this.txtRutaLlavePublica.getText();
+        
+        if (rutaArchivo != ""){
+            System.out.println("El usuario quiere enviar un archivo adjunto");
+            archivoData = Files.readAllBytes(Paths.get(rutaArchivo));
+        }
+        
+        byte[] data = ProtocoloMail.crearMsgEnvioCorreo(remitente, destinatario, mensaje);
+    }
+    
     public void setConexion(Socket cliente){
         this.cliente = cliente;
         
@@ -308,6 +330,10 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
     
     public void setPadre(frmMenuPrincipal padre){
         this.padre = padre;
+    }
+    
+    public void setEmailUsuario(String email){
+        this.emailUsuario = email;
     }
     
     /**

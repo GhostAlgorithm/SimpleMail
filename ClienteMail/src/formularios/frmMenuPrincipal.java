@@ -14,6 +14,7 @@ import java.net.Socket;
 public class frmMenuPrincipal extends javax.swing.JFrame {
     private Socket cliente;
     private frmLogin padre;
+    private String emailUsuario;
 
     /**
      * Creates new form frmMenuPrincipal
@@ -114,6 +115,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         frmEnviarCorreo enviar = new frmEnviarCorreo();
         enviar.setConexion(cliente);
         enviar.setPadre(this);
+        enviar.setEmailUsuario(emailUsuario);
         
         enviar.setVisible(true);
         this.setVisible(false);
@@ -125,6 +127,10 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
     
     public void setPadre(frmLogin padre){
         this.padre = padre;
+    }
+    
+    public void setEmailUsuario(String email){
+        this.emailUsuario = email;
     }
     
     /**

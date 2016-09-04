@@ -19,6 +19,7 @@ public class ProtocoloMail {
     public final static int BUSCAR_DESTINATARIO = 5;
     public final static int DESTINATARIO_ENCONTRADO = 15;
     public final static int DESTINATARIO_DESCONOCIDO = 17;
+    public final static int ENVIAR_CORREO = 3;
     
     public static byte[] crearMsgInicioSesion(String email, String password){
         byte[] mensaje = new byte[1 + 1 + email.length() + 1 + 32];
@@ -81,5 +82,69 @@ public class ProtocoloMail {
         }
         
         return mensaje;
+    }
+    
+    public static byte[] crearMsgEnvioCorreo(String remitente, String destinatario, String texto){
+        byte[] tamanioTexto = BigInteger.valueOf(texto.length()).toByteArray();
+        
+        byte[] mensaje = new byte[1 + 1 + remitente.length() + 1 + destinatario.length()
+                                + 1 + tamanioTexto.length + texto.length()];
+        
+        // Paso 1: Todo mensaje de envio de correo tendra el ID de 3
+        mensaje[0] = ENVIAR_CORREO;
+        
+        // Paso 2: El siguiente byte representa la cantidad de caracteres que posee
+        // el correo del remitente
+        mensaje[1] = (byte) remitente.length();
+        
+        // Paso 3: lo demas corresponde a los caracteres que conforman el correo
+        int posicionArray = 2;
+        char[] remitenteChar = remitente.toCharArray();
+        byte[] remitenteByte = new byte[remitenteChar.length];
+        
+        for (int i=0; i<remitenteChar.length; i++){
+            remitenteByte[i] = (byte) remitenteChar[i];
+            mensaje[posicionArray] = remitenteByte[i];
+            posicionArray++;
+        }
+        
+        // Paso 4: el siguiente byte representa la cantidad de caracteres que posee
+        // el correo del destinatario
+       mensaje[posicionArray] = (byte) destinatario.length();
+       
+       // Paso 5: lo demas corresponde a los caracteres que confoman el correo
+       posicionArray++;
+       char[] destinatarioChar = destinatario.toCharArray();
+       byte[] destinatarioByte = new byte[destinatarioChar.length];
+       
+       for (int i=0; i<destinatarioChar.length; i++){
+           destinatarioByte[i] = (byte) destinatarioChar[i];
+           mensaje[posicionArray] = destinatarioByte[i];
+           posicionArray++;
+       }
+       
+       // Paso 6: el siguiente byte indica el tamaño en bytes que posee el numero entero
+       // que representa el tamaño del texto
+       mensaje[posicionArray] = (byte) tamanioTexto.length;
+       posicionArray++;
+       
+       // Paso 7: lo demas son los bytes en si que conforman el numero entero
+       for (int i=0; i<tamanioTexto.length; i++){
+           mensaje[posicionArray] = tamanioTexto[i];
+           posicionArray++;
+       }
+       
+       // Paso 8: Los demas bytes representan el texto en si del mensaje
+       char[] textoChar = texto.toCharArray();
+       byte[] textoByte = new byte[textoChar.length];
+       
+       for (int i=0; i<textoChar.length; i++){
+           textoByte[i] = (byte) textoChar[i];
+           mensaje[posicionArray] = textoByte[i];
+           posicionArray++;
+       }
+       
+        
+       return mensaje;
     }
 }

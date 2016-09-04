@@ -133,6 +133,7 @@ public class frmLogin extends javax.swing.JFrame {
                 frmMenuPrincipal menu = new frmMenuPrincipal();
                 menu.setConexion(clienteSocket);
                 menu.setPadre(this);
+                menu.setEmailUsuario(email);
                 
                 menu.setVisible(true);
                 this.btnLogin.setEnabled(true);
