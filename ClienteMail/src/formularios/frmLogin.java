@@ -130,7 +130,12 @@ public class frmLogin extends javax.swing.JFrame {
             byte ID = (byte) entrada.read();
             
             if (ID == ProtocoloMail.SESION_ACEPTADA){
-                JOptionPane.showMessageDialog(this, "Sesion iniciada con exito!!");
+                frmMenuPrincipal menu = new frmMenuPrincipal();
+                menu.setConexion(clienteSocket);
+                menu.setPadre(this);
+                
+                menu.setVisible(true);
+                this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraeña no validos!");
                 btnLogin.setEnabled(true);

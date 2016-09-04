@@ -78,6 +78,7 @@ public class ConexionCliente extends Thread {
         } catch(Exception e){
             System.out.println("Error al leer datos!!!");
             System.out.println("" + e.toString());
+            this.setContinuar(false);
         }
     }
 }
