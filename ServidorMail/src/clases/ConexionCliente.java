@@ -8,7 +8,6 @@ package clases;
 import clases.protocolomail.MensajeInicioSesion;
 import clases.protocolomail.ProtocoloMail;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import servidormail.formularios.frmPantallaPrincipal;
@@ -53,11 +52,6 @@ public class ConexionCliente extends Thread {
                 switch(ID){
                     case 1:
                         MensajeInicioSesion msj = ProtocoloMail.procesarInicioSesion(entrada);
-                        
-                        System.out.println("Mensaje Inicio de sesion: ");
-                        System.out.println("Email: " + msj.getEmail());
-                        System.out.println("Password: " + msj.getPassword());
-                        
                         ElementoListaUsuarios usuario = this.padre.tablaUsuarios.buscarUsuario(msj.getEmail());
                         
                         if (usuario != null){
