@@ -10,6 +10,7 @@ import clases.protocolomail.MensajeComprobarDestinatario;
 import clases.protocolomail.MensajeEnviarCorreo;
 import clases.protocolomail.MensajeInicioSesion;
 import clases.protocolomail.ProtocoloMail;
+import clases.seguridad.FirmaDigital;
 import clases.seguridad.IntegridadInformacion;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -86,7 +87,11 @@ public class ConexionCliente extends Thread {
             }
         }
         
+        resultado = FirmaDigital.comprobarFirmaDigital(msj.getDatosFirmados()
+                , msj.getLlavePublica(), msj.getFirmaDigital());
+        
         if (resultado){
+            System.out.println("Paso la prueba de la firma digital, datos intactos!!");
             this.padre.tablaCorreos.insertarCorreo(msj);
         }
         

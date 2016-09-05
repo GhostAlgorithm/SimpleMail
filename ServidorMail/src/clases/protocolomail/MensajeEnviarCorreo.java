@@ -5,6 +5,8 @@
  */
 package clases.protocolomail;
 
+import utilidades.ListaByte;
+
 /**
  *
  * @author home
@@ -93,5 +95,15 @@ public class MensajeEnviarCorreo {
     
     public byte[] getLlavePublica(){
         return this.llavePublica;
+    }
+    
+    public byte[] getDatosFirmados(){
+        ListaByte datosFirmados = new ListaByte();
+        datosFirmados.agregarString(remitente);
+        datosFirmados.agregarString(destinatario);
+        datosFirmados.agregarString(mensaje);
+        datosFirmados.agregarArrayByte(datos);
+        datosFirmados.agregarString(extensionArchivo);
+        return datosFirmados.getBytes();
     }
 }
