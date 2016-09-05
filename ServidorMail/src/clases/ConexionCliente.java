@@ -10,6 +10,7 @@ import clases.protocolomail.MensajeComprobarDestinatario;
 import clases.protocolomail.MensajeEnviarCorreo;
 import clases.protocolomail.MensajeInicioSesion;
 import clases.protocolomail.ProtocoloMail;
+import clases.seguridad.IntegridadInformacion;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -77,7 +78,18 @@ public class ConexionCliente extends Thread {
         System.out.println("Tamaño de bytes de llave: " + msj.getLlavePublica().length);
         
         boolean resultado = false;
-        this.padre.tablaCorreos.insertarCorreo(msj);
+        
+        if (msj.getHayAdjunto()){
+            if (IntegridadInformacion.validezDelArchivo(msj.getDatos(), msj.getMd5Checksum())){
+                resultado = true;
+                System.out.println("Los checksum son igaules, archivo recibido de manera correcta");
+            }
+        }
+        
+        if (resultado){
+            this.padre.tablaCorreos.insertarCorreo(msj);
+        }
+        
         resultado = true;
         return resultado;
     }
