@@ -13,6 +13,7 @@ public class MensajeEnviarCorreo {
     private String remitente;
     private String destinatario;
     private String mensaje;
+    private String extensionArchivo;
     private boolean hayAdjunto = false;
     private byte[] datos = new byte[1];
     private byte[] firmaDigital = new byte[1];
@@ -43,6 +44,14 @@ public class MensajeEnviarCorreo {
     
     public String getMensaje(){
         return this.mensaje;
+    }
+    
+    public void setExtensionArchivo(String extension){
+        this.extensionArchivo = extension;
+    }
+    
+    public String getExtensionArchivo(){
+        return this.extensionArchivo;
     }
     
     public void setHayAdjunto(boolean val){

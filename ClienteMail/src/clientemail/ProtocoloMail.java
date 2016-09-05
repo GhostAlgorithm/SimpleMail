@@ -74,7 +74,8 @@ public class ProtocoloMail {
     }
     
     public static byte[] crearMsgEnvioCorreo(String remitente, String destinatario, String texto
-                         , byte[] archivoData, String rutaLlavePrivada, String rutaLlavePublica){
+                         , byte[] archivoData, String rutaLlavePrivada, String rutaLlavePublica
+                         , String rutaArchivo){
         
         ListaByte bytes = new ListaByte();
         ListaByte datosAFirmar = new ListaByte();
@@ -132,6 +133,16 @@ public class ProtocoloMail {
             // Paso 12: los demas bytes corresponden a los bytes que conforman el archivo
             bytes.agregarArrayByte(archivoData);
             datosAFirmar.agregarArrayByte(archivoData);
+            
+            // Paso 12.1: el siguiente byte representa el tamaño en caracteres
+            // de la extension del archivo enviado
+            String[] ruta = rutaArchivo.split("\\.");
+            String extension = "." + ruta[ruta.length - 1];
+            bytes.agregarByte((byte) extension.length());
+            
+            // Paso 12.3 los demas bytes son la extension del archivo
+            bytes.agregarString(extension);
+            datosAFirmar.agregarString(extension);
         }
         
         // Paso 13: Teniendo toda la informacion necesaria, crear firma digital:

@@ -326,7 +326,8 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
             archivoData = Files.readAllBytes(Paths.get(rutaArchivo));
         }
         
-        byte[] data = ProtocoloMail.crearMsgEnvioCorreo(remitente, destinatario, mensaje, archivoData, rutaLlavePrivada, rutaLlavePublica);
+        byte[] data = ProtocoloMail.crearMsgEnvioCorreo(remitente, destinatario
+                     , mensaje, archivoData, rutaLlavePrivada, rutaLlavePublica, rutaArchivo);
         salida.write(data);
     }
     

@@ -79,6 +79,9 @@ public class ProtocoloMail {
             int lenFlagTamDatos = entrada.read();
             long tamDatos = LectorEntrada.leerBigInteger(entrada, lenFlagTamDatos);
             msj.setDatos(LectorEntrada.leerArrayBytes(entrada, (int) tamDatos));
+            
+            int tamExtension = entrada.read();
+            msj.setExtensionArchivo(LectorEntrada.leerString(entrada, tamExtension));
         }
         
         // Paso 7: el siguiente flag indica el tamaño en bytes de la firma
