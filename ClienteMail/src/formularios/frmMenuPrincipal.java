@@ -97,6 +97,13 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
 
     private void btnBandejaEntradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBandejaEntradaActionPerformed
         // TODO add your handling code here:
+        frmBandejaEntrada bandeja = new frmBandejaEntrada();
+        bandeja.setConexion(cliente);
+        bandeja.setPadre(this);
+        bandeja.setEmailUsuario(emailUsuario);
+        
+        bandeja.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnBandejaEntradaActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
