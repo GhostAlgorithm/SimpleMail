@@ -22,6 +22,8 @@ public class ProtocoloMail {
     public final static int DESTINATARIO_ENCONTRADO = 15;
     public final static int DESTINATARIO_DESCONOCIDO = 17;
     public final static int ENVIAR_CORREO = 3;
+    public final static int ENVIO_EXITOSO = 6;
+    public final static int ENVIO_FALLIDO = 7;
     
     public static byte[] crearMsgInicioSesion(String email, String password){
         //byte[] mensaje = new byte[1 + 1 + email.length() + 1 + 32];

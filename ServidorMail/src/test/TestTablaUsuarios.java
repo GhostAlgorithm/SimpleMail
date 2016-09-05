@@ -5,7 +5,7 @@
  */
 package test;
 
-import clases.TablaHashEnlazadaUsuarios;
+import clases.tablahash.TablaHashEnlazadaUsuarios;
 import clases.Usuario;
 
 /**

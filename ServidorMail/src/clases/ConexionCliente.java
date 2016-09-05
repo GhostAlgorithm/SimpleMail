@@ -5,6 +5,7 @@
  */
 package clases;
 
+import clases.tablahash.ElementoListaUsuarios;
 import clases.protocolomail.MensajeComprobarDestinatario;
 import clases.protocolomail.MensajeEnviarCorreo;
 import clases.protocolomail.MensajeInicioSesion;
@@ -74,6 +75,8 @@ public class ConexionCliente extends Thread {
         System.out.println("Tamaño de bytes de llave: " + msj.getLlavePublica().length);
         
         boolean resultado = false;
+        this.padre.tablaCorreos.insertarCorreo(msj);
+        resultado = true;
         return resultado;
     }
     
@@ -105,9 +108,9 @@ public class ConexionCliente extends Thread {
                     case ProtocoloMail.ENVIAR_CORREO:
                         MensajeEnviarCorreo msj3 = ProtocoloMail.procesarEnvioCorreo(entrada);
                         if (this.procesarCorreo(msj3)){
-                            
+                            salida.write(ProtocoloMail.ENVIO_EXITOSO);
                         } else {
-                            
+                            salida.write(ProtocoloMail.ENVIO_FALLIDO);
                         }
                         break;
                     case -1:

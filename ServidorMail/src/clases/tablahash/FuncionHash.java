@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package clases;
+package clases.tablahash;
 
 /**
  *
@@ -12,7 +12,7 @@ package clases;
 public class FuncionHash {
     static final double R = 0.618034;
     
-    static int dispersion(int tamtabla, long x){
+    public static int dispersion(int tamtabla, long x){
         double t;
         int v;
         

@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package clases;
+package clases.tablahash;
 
-import static clases.TablaHashEnlazadaUsuarios.TAMTABLA;
 import clases.protocolomail.MensajeEnviarCorreo;
 
 /**
