@@ -14,6 +14,7 @@ public class MensajeEnviarCorreo {
     private String destinatario;
     private String mensaje;
     private String extensionArchivo;
+    private String md5Checksum;
     private boolean hayAdjunto = false;
     private byte[] datos = new byte[1];
     private byte[] firmaDigital = new byte[1];
@@ -52,6 +53,14 @@ public class MensajeEnviarCorreo {
     
     public String getExtensionArchivo(){
         return this.extensionArchivo;
+    }
+    
+    public void setMd5Checksum(String md5){
+        this.md5Checksum = md5;
+    }
+    
+    public String getMd5Checksum(){
+        return this.md5Checksum;
     }
     
     public void setHayAdjunto(boolean val){

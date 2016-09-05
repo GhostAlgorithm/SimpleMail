@@ -72,6 +72,7 @@ public class ConexionCliente extends Thread {
         System.out.println("Mensaje: " + msj.getMensaje());
         System.out.println("Tamaño de adjunto: " + msj.getDatos().length);
         System.out.println("Extension de archivo: " + msj.getExtensionArchivo());
+        System.out.println("MD5Checksum del archivo: " + msj.getMd5Checksum());
         System.out.println("Tamaño de bytes de firma: " + msj.getFirmaDigital().length);
         System.out.println("Tamaño de bytes de llave: " + msj.getLlavePublica().length);
         

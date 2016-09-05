@@ -143,6 +143,11 @@ public class ProtocoloMail {
             // Paso 12.3 los demas bytes son la extension del archivo
             bytes.agregarString(extension);
             datosAFirmar.agregarString(extension);
+            
+            // Paso 12.4: Generar md5Checksum del archivo a enviar y agregarlo al mensaje
+            String md5Checksum = IntegridadInformacion.generarMD5Checksum(archivoData);
+            bytes.agregarByte((byte) 32);
+            bytes.agregarString(md5Checksum);
         }
         
         // Paso 13: Teniendo toda la informacion necesaria, crear firma digital:

@@ -80,8 +80,13 @@ public class ProtocoloMail {
             long tamDatos = LectorEntrada.leerBigInteger(entrada, lenFlagTamDatos);
             msj.setDatos(LectorEntrada.leerArrayBytes(entrada, (int) tamDatos));
             
+            // Paso 6.1: Leyendo la extension del archivo
             int tamExtension = entrada.read();
             msj.setExtensionArchivo(LectorEntrada.leerString(entrada, tamExtension));
+            
+            // Paso 6.2: leyendo el md5Checksum asociado al archivo
+            int tamMd5 = entrada.read();
+            msj.setMd5Checksum(LectorEntrada.leerString(entrada, tamMd5));
         }
         
         // Paso 7: el siguiente flag indica el tamaño en bytes de la firma
