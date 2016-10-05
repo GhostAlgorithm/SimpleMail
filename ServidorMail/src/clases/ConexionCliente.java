@@ -5,6 +5,7 @@
  */
 package clases;
 
+import clases.protocolomail.MensajeBandejaEntrada;
 import clases.tablahash.ElementoListaUsuarios;
 import clases.protocolomail.MensajeComprobarDestinatario;
 import clases.protocolomail.MensajeEnviarCorreo;
@@ -12,9 +13,11 @@ import clases.protocolomail.MensajeInicioSesion;
 import clases.protocolomail.ProtocoloMail;
 import clases.seguridad.FirmaDigital;
 import clases.seguridad.IntegridadInformacion;
+import clases.tablahash.ElementoListaCorreos;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import servidormail.formularios.frmPantallaPrincipal;
 
 /**
@@ -66,6 +69,10 @@ public class ConexionCliente extends Thread {
             return true;
         }
         return false;
+    }
+    
+    public ArrayList<ElementoListaCorreos> buscarCorreos(MensajeBandejaEntrada msj){
+        return this.padre.tablaCorreos.buscarCorreos(msj.getEmail());
     }
     
     public boolean procesarCorreo(MensajeEnviarCorreo msj){
@@ -122,6 +129,27 @@ public class ConexionCliente extends Thread {
                             salida.write(ProtocoloMail.DESTINATARIO_ENCONTRADO);
                         } else {
                             salida.write(ProtocoloMail.DESTINATARIO_DESCONOCIDO);
+                        }
+                        break;
+                    case ProtocoloMail.BANDEJA_ENTRADA:
+                        MensajeBandejaEntrada msj4 = ProtocoloMail.procesarBandejaEntrada(entrada);
+                        
+                        // Buscando correos:
+                        ArrayList<ElementoListaCorreos> correos = this.buscarCorreos(msj4);
+                        
+                        if (correos.size() == 0){
+                            salida.write(ProtocoloMail.BANDEJA_VACIA);
+                        } else {
+                            System.out.println("El tamaño de bandeja de entrada: " + correos.size());
+                            for (int i=0; i < correos.size(); i++){
+                                ElementoListaCorreos correo = correos.get(i);
+                                
+                                // Enviando correo
+                                salida.write(ProtocoloMail.CORREO);
+                                salida.write(correo.getMensaje().getDatosOriginales().getBytes());
+                            }
+                            
+                            salida.write(ProtocoloMail.FIN_BANDEJA);
                         }
                         break;
                     case ProtocoloMail.ENVIAR_CORREO:

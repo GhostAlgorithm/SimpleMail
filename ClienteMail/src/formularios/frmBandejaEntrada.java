@@ -5,7 +5,13 @@
  */
 package formularios;
 
+import clientemail.MensajeEnviarCorreo;
+import clientemail.ProtocoloMail;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,12 +21,17 @@ public class frmBandejaEntrada extends javax.swing.JFrame {
     private Socket cliente;
     private frmMenuPrincipal padre;
     private String emailUsuario;
+    private InputStream entrada;
+    private OutputStream salida;
+    private ArrayList<MensajeEnviarCorreo> correos = new ArrayList();
 
     /**
      * Creates new form frmBandejaEntrada
      */
     public frmBandejaEntrada() {
         initComponents();
+        
+        this.correos = new ArrayList();
     }
 
     /**
@@ -80,9 +91,43 @@ public class frmBandejaEntrada extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void getCorreos(){
+        try {
+            this.salida.write(ProtocoloMail.crearMsgBandejaEntrada(emailUsuario));
+            boolean continuar = true;
+            
+            while (continuar){
+                int ID = this.entrada.read();
+                
+                switch(ID){
+                    case ProtocoloMail.BANDEJA_VACIA:
+                        JOptionPane.showMessageDialog(this, "No hay correos que desplegar en bandeja de entrada!");
+                        continuar = false;
+                        break;
+                    case ProtocoloMail.CORREO:
+                        MensajeEnviarCorreo msj = ProtocoloMail.procesarEnvioCorreo(entrada);
+                        correos.add(msj);
+                        break;
+                    case ProtocoloMail.FIN_BANDEJA:
+                        continuar = false;
+                        break;
+                }
+            }
+        } catch(Exception e){
+            System.out.println("Error: " + e.toString());
+        }
+        
+        JOptionPane.showMessageDialog(this, "Correos: " + correos.size());
+    }
     
     public void setConexion(Socket cliente){
         this.cliente = cliente;
+        
+        try{
+            this.entrada = this.cliente.getInputStream();
+            this.salida = this.cliente.getOutputStream();
+        } catch(Exception e){
+        }
     }
     
     public void setPadre(frmMenuPrincipal padre){

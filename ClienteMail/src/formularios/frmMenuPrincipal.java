@@ -104,6 +104,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         
         bandeja.setVisible(true);
         this.setVisible(false);
+        bandeja.getCorreos();
     }//GEN-LAST:event_btnBandejaEntradaActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
