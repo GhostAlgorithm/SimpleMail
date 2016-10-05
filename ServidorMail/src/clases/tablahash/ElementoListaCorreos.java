@@ -32,7 +32,7 @@ public class ElementoListaCorreos {
         this.siguiente = siguiente;
     }
     
-    public ElementoListaCorreos getSiguiente(ElementoListaCorreos siguiente){
+    public ElementoListaCorreos getSiguiente(){
         return this.siguiente;
     }
 }
