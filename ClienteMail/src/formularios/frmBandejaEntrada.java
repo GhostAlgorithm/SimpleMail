@@ -5,12 +5,16 @@
  */
 package formularios;
 
+import clientemail.FirmaDigital;
+import clientemail.IntegridadInformacion;
 import clientemail.MensajeEnviarCorreo;
 import clientemail.ProtocoloMail;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,6 +28,7 @@ public class frmBandejaEntrada extends javax.swing.JFrame {
     private InputStream entrada;
     private OutputStream salida;
     private ArrayList<MensajeEnviarCorreo> correos = new ArrayList();
+    private DefaultListModel modelListaCorreo = new DefaultListModel();
 
     /**
      * Creates new form frmBandejaEntrada
@@ -32,6 +37,13 @@ public class frmBandejaEntrada extends javax.swing.JFrame {
         initComponents();
         
         this.correos = new ArrayList();
+        modelListaCorreo = new DefaultListModel();
+        lstListaCoreos.setModel(modelListaCorreo);
+        
+        txtNombreArchivo.setEditable(false);
+        txtMensaje.setEditable(false);
+        txtRemitente.setEditable(false);
+        txtValidez.setEditable(false);
     }
 
     /**
@@ -48,6 +60,17 @@ public class frmBandejaEntrada extends javax.swing.JFrame {
         lstListaCorreos = new javax.swing.JScrollPane();
         lstListaCoreos = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtNombreArchivo = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtMensaje = new javax.swing.JTextArea();
+        jLabel8 = new javax.swing.JLabel();
+        txtRemitente = new javax.swing.JTextField();
+        btnDescargar = new javax.swing.JButton();
+        lblValidez = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtValidez = new javax.swing.JTextArea();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -58,38 +81,134 @@ public class frmBandejaEntrada extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        lstListaCoreos.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstListaCoreosValueChanged(evt);
+            }
+        });
         lstListaCorreos.setViewportView(lstListaCoreos);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Bandeja de entrada:");
 
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setText("Remitente:");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setText("Adjunto:");
+
+        txtMensaje.setColumns(20);
+        txtMensaje.setRows(5);
+        jScrollPane2.setViewportView(txtMensaje);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel8.setText("Mensaje:");
+
+        btnDescargar.setText("Descargar");
+
+        lblValidez.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblValidez.setText("Validez:");
+
+        txtValidez.setColumns(20);
+        txtValidez.setRows(5);
+        jScrollPane3.setViewportView(txtValidez);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lstListaCorreos, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lstListaCorreos, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtRemitente))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(177, 177, 177)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(251, Short.MAX_VALUE))
+                        .addComponent(txtNombreArchivo)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDescargar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(lblValidez))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(192, 192, 192))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
-                .addComponent(lstListaCorreos, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtRemitente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNombreArchivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDescargar))
+                .addGap(18, 18, 18)
+                .addComponent(lblValidez)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(57, 57, 57)
+                .addComponent(lstListaCorreos)
+                .addContainerGap())
         );
+
+        jLabel7.getAccessibleContext().setAccessibleName("Mensaje:");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void lstListaCoreosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstListaCoreosValueChanged
+        // TODO add your handling code here:
+        
+        int indice = ((JList)evt.getSource()).getSelectedIndex();
+        MensajeEnviarCorreo correo = correos.get(indice);
+        
+        // Desplegando informacion del correo
+        txtRemitente.setText(correo.getRemitente());
+        txtMensaje.setText(correo.getMensaje());
+        
+        if (correo.getHayAdjunto()){
+            btnDescargar.setEnabled(true);
+            txtNombreArchivo.setText(correo.getDatosOriginales().getBytes().length + correo.getExtensionArchivo());
+        } else {
+            txtNombreArchivo.setText("No hay archivo adjunto");
+            btnDescargar.setEnabled(false);
+        }
+        
+        if (this.validezMensaje(correo)){
+            txtValidez.setText("Validez: se ha verificado la validez del mensaje\n"
+                             + "Los datos del archivo adjunto + la identidad del remitente\n"
+                             + "Ha sido verificada. El mensaje ha llegado intacto sin modificaciones");
+        } else {
+            txtValidez.setText("Validez: se ha verificado la validez del mensaje\n"
+                             + "Los datos del archivo adjunto + la identidad del remitente\n"
+                             + "No son los valores esperados. Puede que el mensaje haya sido\n"
+                             + "comprometido o halla llegado incompleto (corrupto)");
+        }
+    }//GEN-LAST:event_lstListaCoreosValueChanged
 
     public void getCorreos(){
         try {
@@ -111,13 +230,38 @@ public class frmBandejaEntrada extends javax.swing.JFrame {
                     case ProtocoloMail.FIN_BANDEJA:
                         continuar = false;
                         break;
+                    default:
+                        System.out.println("Nos estamos saltando datos!!");
+                        break;
                 }
             }
         } catch(Exception e){
             System.out.println("Error: " + e.toString());
         }
         
-        JOptionPane.showMessageDialog(this, "Correos: " + correos.size());
+        // Procedemos a desplegar los correos en la interfaz
+        for (int i=0; i<correos.size(); i++){
+            modelListaCorreo.addElement(correos.get(i).getRemitente() + ": " + correos.get(i).getMensaje().substring(0, 10));
+        }
+    }
+    
+    public boolean validezMensaje(MensajeEnviarCorreo msj){
+        boolean resultado1 = false;
+        boolean resultado2 = false;
+        
+        if (IntegridadInformacion.validezDelArchivo(msj.getDatos(), msj.getMd5Checksum())){
+            resultado1 = true;
+            System.out.println("Los checksum son igaules, archivo recibido de manera correcta");
+        }
+        
+        resultado2 = FirmaDigital.comprobarFirmaDigital(msj.getDatosFirmados()
+                , msj.getLlavePublica(), msj.getFirmaDigital());
+        
+        if (resultado1 && resultado2){
+            return true;
+        } else {
+            return false;
+        }
     }
     
     public void setConexion(Socket cliente){
@@ -174,10 +318,21 @@ public class frmBandejaEntrada extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDescargar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblValidez;
     private javax.swing.JList<String> lstListaCoreos;
     private javax.swing.JScrollPane lstListaCorreos;
+    private javax.swing.JTextArea txtMensaje;
+    private javax.swing.JTextField txtNombreArchivo;
+    private javax.swing.JTextField txtRemitente;
+    private javax.swing.JTextArea txtValidez;
     // End of variables declaration//GEN-END:variables
 }

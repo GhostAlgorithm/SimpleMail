@@ -26,4 +26,17 @@ public class IntegridadInformacion {
         resultado = new BigInteger(1, md5Hash).toString(16);
         return resultado;
     }
+    
+    public static boolean validezDelArchivo(byte[] data, String md5Hash){
+        boolean resultado = false;
+        
+        // Generando el md5checksum a partir de los datos del archivo
+        String md5Nuevo = IntegridadInformacion.generarMD5Checksum(data);
+        
+        if (md5Nuevo.equals(md5Hash)){
+            resultado = true;
+        }
+        
+        return resultado;
+    }
 }
