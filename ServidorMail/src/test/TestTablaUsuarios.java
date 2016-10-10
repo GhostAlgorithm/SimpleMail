@@ -5,7 +5,7 @@
  */
 package test;
 
-import clases.tablahash.TablaHashEnlazadaUsuarios;
+import clases.tablahash.TablaHashUsuarios;
 import clases.Usuario;
 
 /**
@@ -13,8 +13,8 @@ import clases.Usuario;
  * @author home
  */
 public class TestTablaUsuarios {
-    public static TablaHashEnlazadaUsuarios crearTablaPrueba(){
-        TablaHashEnlazadaUsuarios tabla = new TablaHashEnlazadaUsuarios();
+    public static TablaHashUsuarios crearTablaPrueba(){
+        TablaHashUsuarios tabla = new TablaHashUsuarios();
         
         // Creando Usuarios de prueba
         

@@ -6,8 +6,8 @@
 package servidormail.formularios;
 
 import clases.SocketServer;
-import clases.tablahash.TablaHashEnlazadaCorreos;
-import clases.tablahash.TablaHashEnlazadaUsuarios;
+import clases.tablahash.TablaHashCorreos;
+import clases.tablahash.TablaHashUsuarios;
 import java.awt.EventQueue;
 import test.TestTablaUsuarios;
 
@@ -17,8 +17,8 @@ import test.TestTablaUsuarios;
  */
 public class frmPantallaPrincipal extends javax.swing.JFrame {
     private SocketServer servidor;
-    public TablaHashEnlazadaUsuarios tablaUsuarios;
-    public TablaHashEnlazadaCorreos tablaCorreos;
+    public TablaHashUsuarios tablaUsuarios;
+    public TablaHashCorreos tablaCorreos;
 
     /**
      * Creates new form frmPantallaPrincipal
@@ -121,7 +121,7 @@ public class frmPantallaPrincipal extends javax.swing.JFrame {
         
         // Creando tabla de usuarios de prueba
         this.tablaUsuarios = TestTablaUsuarios.crearTablaPrueba();
-        this.tablaCorreos = new TablaHashEnlazadaCorreos();
+        this.tablaCorreos = new TablaHashCorreos();
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void btnDetenerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerActionPerformed

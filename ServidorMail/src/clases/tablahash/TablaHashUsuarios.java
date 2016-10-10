@@ -11,12 +11,12 @@ import clases.Usuario;
  *
  * @author home
  */
-public class TablaHashEnlazadaUsuarios {
+public class TablaHashUsuarios {
     static final int TAMTABLA = 200;
     private ElementoListaUsuarios[] tabla;
     private int numeroElementos = 0;
     
-    public TablaHashEnlazadaUsuarios(){
+    public TablaHashUsuarios(){
         this.tabla = new ElementoListaUsuarios[TAMTABLA];
         for (int i=0; i<TAMTABLA; i++){
             this.tabla[i] = null;

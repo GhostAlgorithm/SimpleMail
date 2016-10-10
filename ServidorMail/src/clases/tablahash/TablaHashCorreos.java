@@ -12,12 +12,12 @@ import java.util.ArrayList;
  *
  * @author home
  */
-public class TablaHashEnlazadaCorreos {
+public class TablaHashCorreos {
     static final int TAMTABLA = 500;
     private ElementoListaCorreos[] tabla;
     private int numeroElementos = 0;
     
-    public TablaHashEnlazadaCorreos(){
+    public TablaHashCorreos(){
         this.tabla = new ElementoListaCorreos[TAMTABLA];
         
         for (int i =0; i<TAMTABLA; i++){
