@@ -21,8 +21,8 @@ import javax.swing.JOptionPane;
  */
 public class frmLogin extends javax.swing.JFrame {
     private Socket clienteSocket;
-    private String ipServidor = "127.0.0.1";
-    private String puertoServidor = "9873";
+    private String ipServidor = null;
+    private String puertoServidor = null;
 
     /**
      * Creates new form frmLogin

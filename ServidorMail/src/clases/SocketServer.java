@@ -19,15 +19,17 @@ public class SocketServer extends Thread{
     private boolean continuar = true;
     private ArrayList<ConexionCliente> clientes;
     private frmPantallaPrincipal padre;
+    private int puerto = 9873;
     
-    public SocketServer(frmPantallaPrincipal padre){
+    public SocketServer(frmPantallaPrincipal padre, int puerto){
         this.clientes = new ArrayList<ConexionCliente>();
         this.padre = padre;
+        this.puerto = puerto;
     }
     
     public void run(){
         try {
-            this.server = new ServerSocket(9873);
+            this.server = new ServerSocket(this.puerto);
             while (this.continuar){
                 Socket cliente = this.server.accept();
                 ConexionCliente con = new ConexionCliente(this.padre, cliente);

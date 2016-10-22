@@ -45,18 +45,19 @@ public class ProtocoloMail {
         // Paso 3: todo lo que sigue, son los caracteres que conforman el correo en si
         mensaje.agregarString(email);
         
-        // Paso 4: el siguiente byte, corresponde al tamaño del hash MD5 de la contraseña
-        // en este caso, para MD5 siendo siempre 32
-        mensaje.agregarByte((byte) 32);
-        
         // Paso 5: los demas bytes, corresponden a los caracteres que conforman el hash MD5
         byte[] md5Hash = new byte[5];
         try{
             MessageDigest md = MessageDigest.getInstance("MD5");
             md5Hash = md.digest(password.getBytes());
         } catch(Exception e){
+            System.out.println("Error al procesar hash: " + e.toString());
         }
         String md5 = new BigInteger(1, md5Hash).toString(16);
+        
+        // Paso 4: el siguiente byte, corresponde al tamaño del hash MD5 de la contraseña
+        // en este caso, para MD5 siendo siempre 32
+        mensaje.agregarByte((byte) md5.length());
         mensaje.agregarString(md5);
         
         return mensaje.getBytes();
