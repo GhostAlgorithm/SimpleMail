@@ -135,6 +135,14 @@ public class frmLogin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setIPServidor(String ip){
+        this.ipServidor = ip;
+    }
+    
+    public void setPuertoServidor(String puerto){
+        this.puertoServidor = puerto;
+    }
+    
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         btnLogin.setEnabled(false);
@@ -196,6 +204,7 @@ public class frmLogin extends javax.swing.JFrame {
     private void btnConfigurarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigurarClienteActionPerformed
         // TODO add your handling code here:
         frmConfigurarCliente frm = new frmConfigurarCliente();
+        frm.setPadre(this);
         frm.setVisible(true);
     }//GEN-LAST:event_btnConfigurarClienteActionPerformed
 

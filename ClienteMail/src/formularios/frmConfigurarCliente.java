@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
  * @author home
  */
 public class frmConfigurarCliente extends javax.swing.JFrame {
+    private frmLogin padre = null;
 
     /**
      * Creates new form frmConfigurarCliente
@@ -107,6 +108,10 @@ public class frmConfigurarCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setPadre(frmLogin padre){
+        this.padre = padre;
+    }
+    
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         try{
@@ -115,7 +120,6 @@ public class frmConfigurarCliente extends javax.swing.JFrame {
             txtPuerto.setText(arch2.readLine().split("=")[1]);
             arch2.close();
         } catch(Exception e){
-            
         }
     }//GEN-LAST:event_formWindowOpened
 
@@ -127,10 +131,13 @@ public class frmConfigurarCliente extends javax.swing.JFrame {
             arch2.println("SERVER_IP=" + txtIP.getText());
             arch2.print("SERVER_PORT=" + txtPuerto.getText());
             arch2.close();
+            
+            this.padre.setIPServidor(txtIP.getText());
+            this.padre.setPuertoServidor(txtIP.getText());
         } catch(Exception e){
             System.out.println("Error: " + e.toString());
         }
-        JOptionPane.showMessageDialog(this, "Configuración guardada exitosamente, reinicie el cliente\npara usar la nueva configuración");
+        JOptionPane.showMessageDialog(this, "Configuración del cliente guardada con éxito");
         this.setVisible(false);
     }//GEN-LAST:event_btnGuardarActionPerformed
 

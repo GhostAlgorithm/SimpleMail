@@ -42,7 +42,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Menu Principal");
+        jLabel1.setText("Menú Principal");
 
         btnBandejaEntrada.setText("Bandeja de entrada");
         btnBandejaEntrada.addActionListener(new java.awt.event.ActionListener() {
@@ -58,7 +58,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnCerrarSesion.setText("Cerrar Sesion");
+        btnCerrarSesion.setText("Cerrar Sesión");
         btnCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCerrarSesionActionPerformed(evt);
@@ -103,7 +103,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         bandeja.setEmailUsuario(emailUsuario);
         
         bandeja.setVisible(true);
-        //this.setVisible(false);
+        this.setVisible(false);
         bandeja.getCorreos();
     }//GEN-LAST:event_btnBandejaEntradaActionPerformed
 
