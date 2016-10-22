@@ -103,7 +103,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
         bandeja.setEmailUsuario(emailUsuario);
         
         bandeja.setVisible(true);
-        this.setVisible(false);
+        //this.setVisible(false);
         bandeja.getCorreos();
     }//GEN-LAST:event_btnBandejaEntradaActionPerformed
 

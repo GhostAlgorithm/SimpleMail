@@ -5,11 +5,13 @@
  */
 package utilidades;
 
+import java.io.Serializable;
+
 /**
  *
  * @author home
  */
-public class ListaByte {
+public class ListaByte implements Serializable{
     private byte[] array = null;
     private int tamanio = 0;
     

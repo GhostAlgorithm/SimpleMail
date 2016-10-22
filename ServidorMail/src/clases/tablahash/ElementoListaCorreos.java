@@ -6,12 +6,13 @@
 package clases.tablahash;
 
 import clases.protocolomail.MensajeEnviarCorreo;
+import java.io.Serializable;
 
 /**
  *
  * @author home
  */
-public class ElementoListaCorreos {
+public class ElementoListaCorreos implements Serializable{
     private MensajeEnviarCorreo mensaje;
     private ElementoListaCorreos siguiente = null;
     private String setFecha;

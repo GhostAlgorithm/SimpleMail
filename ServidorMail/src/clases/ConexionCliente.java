@@ -116,11 +116,7 @@ public class ConexionCliente extends Thread {
                 
                 switch(ID){
                     case ProtocoloMail.INICIO_SESION:
-                        System.out.println("Antes de dar el read...");
                         MensajeInicioSesion msj = ProtocoloMail.procesarInicioSesion(entrada);
-                        System.out.println("Detectamos inicio de sesion desde el servidor");
-                        System.out.println("Usuario: " + msj.getEmail());
-                        System.out.println("Pwd: " + msj.getPassword());
                         
                         if (chequearLogin(msj)){
                             salida.write(ProtocoloMail.SESION_ACEPTADA);

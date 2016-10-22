@@ -5,13 +5,14 @@
  */
 package clases.protocolomail;
 
+import java.io.Serializable;
 import utilidades.ListaByte;
 
 /**
  *
  * @author home
  */
-public class MensajeEnviarCorreo {
+public class MensajeEnviarCorreo implements Serializable{
     private String remitente;
     private String destinatario;
     private String mensaje;

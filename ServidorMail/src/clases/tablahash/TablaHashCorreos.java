@@ -6,13 +6,14 @@
 package clases.tablahash;
 
 import clases.protocolomail.MensajeEnviarCorreo;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author home
  */
-public class TablaHashCorreos {
+public class TablaHashCorreos implements Serializable{
     static final int TAMTABLA = 500;
     private ElementoListaCorreos[] tabla;
     private int numeroElementos = 0;

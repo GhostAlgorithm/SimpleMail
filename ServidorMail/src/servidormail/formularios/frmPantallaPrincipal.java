@@ -12,7 +12,11 @@ import clases.tablahash.TablaHashUsuarios;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import test.TestTablaUsuarios;
 
@@ -55,6 +59,9 @@ public class frmPantallaPrincipal extends javax.swing.JFrame {
         setTitle("Servidor Mail");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -168,7 +175,6 @@ public class frmPantallaPrincipal extends javax.swing.JFrame {
         this.servidor.start();
         this.agregarAccion("Servidor iniciado con exito, esperando clientes\n");
         this.btnDetener.setEnabled(true);
-        this.tablaCorreos = new TablaHashCorreos();
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void btnDetenerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerActionPerformed
@@ -207,7 +213,31 @@ public class frmPantallaPrincipal extends javax.swing.JFrame {
         } catch(Exception e){
             System.out.println("Error: " + e.toString());
         }
+        
+        try{
+            File arch = new File("correos_persistencia.data");
+            if (arch.exists()){
+                FileInputStream fis = new FileInputStream("correos_persistencia.data");
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                this.tablaCorreos = (TablaHashCorreos) ois.readObject();
+            } else {
+                this.tablaCorreos = new TablaHashCorreos();
+            }
+        } catch(Exception e){
+            System.out.println("Error al deserializar la persistencia " + e.toString());
+        }
     }//GEN-LAST:event_formWindowOpened
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // Serializar objeto que contiene los correos
+        try {
+            FileOutputStream fout = new FileOutputStream("correos_persistencia.data");
+            ObjectOutputStream oos = new ObjectOutputStream(fout);
+            oos.writeObject(this.tablaCorreos);
+        } catch (Exception e){
+            System.out.println("Error al crear persistencia de correos: " + e.toString());
+        }
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
