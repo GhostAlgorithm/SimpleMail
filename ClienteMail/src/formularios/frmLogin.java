@@ -6,8 +6,12 @@
 package formularios;
 
 import clientemail.ProtocoloMail;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import javax.swing.JOptionPane;
 
@@ -17,6 +21,8 @@ import javax.swing.JOptionPane;
  */
 public class frmLogin extends javax.swing.JFrame {
     private Socket clienteSocket;
+    private String ipServidor = "127.0.0.1";
+    private String puertoServidor = "9873";
 
     /**
      * Creates new form frmLogin
@@ -40,9 +46,15 @@ public class frmLogin extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
         btnLogin = new javax.swing.JButton();
+        btnConfigurarCliente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -58,6 +70,13 @@ public class frmLogin extends javax.swing.JFrame {
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
+            }
+        });
+
+        btnConfigurarCliente.setText("Configuracion Cliente");
+        btnConfigurarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfigurarClienteActionPerformed(evt);
             }
         });
 
@@ -86,7 +105,9 @@ public class frmLogin extends javax.swing.JFrame {
                         .addGap(0, 25, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnConfigurarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -104,7 +125,9 @@ public class frmLogin extends javax.swing.JFrame {
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnConfigurarCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jLabel1.getAccessibleContext().setAccessibleName("");
@@ -120,7 +143,7 @@ public class frmLogin extends javax.swing.JFrame {
         
         // Creando socket de cliente y enviando inicio de sesion
         try {
-            clienteSocket = new Socket("127.0.0.1", 9873);
+            clienteSocket = new Socket(ipServidor, Integer.parseInt(puertoServidor));
             byte[] inicioSesion = ProtocoloMail.crearMsgInicioSesion(email, password);
             OutputStream salida = clienteSocket.getOutputStream();
             salida.write(inicioSesion);
@@ -146,6 +169,35 @@ public class frmLogin extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // Verificamos si existe el archivo de configuracion
+        try {
+            File arch = new File("configuracion_cliente.txt");
+            if (!arch.exists()){
+                PrintWriter arch2 = new PrintWriter(arch);
+                arch2.println("SERVER_IP=127.0.0.1");
+                arch2.print("SERVER_PORT=9873");
+                arch2.close();
+            } else {
+                BufferedReader arch2 = new BufferedReader(new FileReader("configuracion_cliente.txt"));
+                ipServidor = arch2.readLine().split("=")[1];
+                puertoServidor = arch2.readLine().split("=")[1];
+                arch2.close();
+                
+                System.out.println("La ip servidor leida: " + ipServidor);
+                System.out.println("El puerto servidor leido: " + puertoServidor);
+            }
+        } catch(Exception e){
+            System.out.println("Error: " + e.toString());
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnConfigurarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfigurarClienteActionPerformed
+        // TODO add your handling code here:
+        frmConfigurarCliente frm = new frmConfigurarCliente();
+        frm.setVisible(true);
+    }//GEN-LAST:event_btnConfigurarClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -183,6 +235,7 @@ public class frmLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnConfigurarCliente;
     private javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
