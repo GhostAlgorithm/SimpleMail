@@ -93,7 +93,10 @@ public class ConexionCliente extends Thread {
                 resultado = true;
                 System.out.println("Los checksum son igaules, archivo recibido de manera correcta");
             }
+        }else {
+            resultado = true;
         }
+        
         System.out.println("Comprobando firma digital");
         resultado2 = FirmaDigital.comprobarFirmaDigital(msj.getDatosFirmados()
                 , msj.getLlavePublica(), msj.getFirmaDigital());

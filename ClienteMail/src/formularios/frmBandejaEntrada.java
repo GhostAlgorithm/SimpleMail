@@ -306,6 +306,8 @@ public class frmBandejaEntrada extends javax.swing.JFrame {
         if (IntegridadInformacion.validezDelArchivo(msj.getDatos(), msj.getMd5Checksum())){
             resultado1 = true;
             System.out.println("Los checksum son igaules, archivo recibido de manera correcta");
+        } else {
+            resultado1 = true;
         }
         
         resultado2 = FirmaDigital.comprobarFirmaDigital(msj.getDatosFirmados()
