@@ -104,8 +104,12 @@ public class MensajeEnviarCorreo implements Serializable{
         datosFirmados.agregarString(remitente);
         datosFirmados.agregarString(destinatario);
         datosFirmados.agregarString(mensaje);
-        datosFirmados.agregarArrayByte(datos);
-        datosFirmados.agregarString(extensionArchivo);
+        
+        if (this.getHayAdjunto()){
+            datosFirmados.agregarArrayByte(datos);
+            datosFirmados.agregarString(extensionArchivo);
+        }
+        
         return datosFirmados.getBytes();
     }
     

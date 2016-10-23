@@ -170,11 +170,11 @@ public class frmLogin extends javax.swing.JFrame {
                 this.btnLogin.setEnabled(true);
                 this.setVisible(false);
             } else {
-                JOptionPane.showMessageDialog(this, "Usuario o contraeña no validos!");
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña no validos!");
                 btnLogin.setEnabled(true);
             }
         } catch(Exception e){
-            
+            System.out.println("Error: " + e.toString());
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 

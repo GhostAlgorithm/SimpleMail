@@ -51,7 +51,7 @@ public class frmMenuPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnRedactarCorreo.setText("Redactar Coreo");
+        btnRedactarCorreo.setText("Redactar Correo");
         btnRedactarCorreo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRedactarCorreoActionPerformed(evt);

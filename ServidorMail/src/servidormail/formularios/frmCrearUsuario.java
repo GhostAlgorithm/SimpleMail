@@ -12,7 +12,9 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 
 /**
  *
@@ -31,6 +33,7 @@ public class frmCrearUsuario extends javax.swing.JFrame {
     public frmCrearUsuario(frmPantallaPrincipal frm) {
         initComponents();
         this.padre = frm;
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -112,6 +115,12 @@ public class frmCrearUsuario extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+        
+        if (txtEmail.getText().isEmpty() && txtPassword.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Los campos Correo y Password son obligatorios!");
+            return;
+        }
+        
         try {
             PrintWriter arch = new PrintWriter(new BufferedWriter(new FileWriter("cuentas_correo.txt", true)));
             

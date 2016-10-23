@@ -9,7 +9,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 
 /**
  *
@@ -23,6 +25,7 @@ public class frmConfigurarCliente extends javax.swing.JFrame {
      */
     public frmConfigurarCliente() {
         initComponents();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -133,7 +136,7 @@ public class frmConfigurarCliente extends javax.swing.JFrame {
             arch2.close();
             
             this.padre.setIPServidor(txtIP.getText());
-            this.padre.setPuertoServidor(txtIP.getText());
+            this.padre.setPuertoServidor(txtPuerto.getText());
         } catch(Exception e){
             System.out.println("Error: " + e.toString());
         }

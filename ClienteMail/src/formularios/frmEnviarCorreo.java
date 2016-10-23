@@ -253,6 +253,16 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
 
     private void btnEnviarCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarCorreoActionPerformed
         // TODO add your handling code here:
+        if (txtRutaLlavePrivada.getText().isEmpty() && txtRutaLlavePublica.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Por favor ingrese la ruta de la llave pública y privada");
+            return;
+        }
+        
+        if (txtCorreo.getText().isEmpty() && txtRutaArchivo.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Por favor ingrese el texto del mensaje y/o archivo\npara enviar el correo.");
+            return;
+        }
+        
         String destinatario = txtDestinatario.getText();
         
         byte[] mensaje = ProtocoloMail.crearMsgCompDestinatario(destinatario);
@@ -321,7 +331,7 @@ public class frmEnviarCorreo extends javax.swing.JFrame {
         String rutaLlavePrivada = this.txtRutaLlavePrivada.getText();
         String rutaLlavePublica = this.txtRutaLlavePublica.getText();
         
-        if (rutaArchivo != ""){
+        if (!rutaArchivo.isEmpty()){
             System.out.println("El usuario quiere enviar un archivo adjunto");
             archivoData = Files.readAllBytes(Paths.get(rutaArchivo));
         }

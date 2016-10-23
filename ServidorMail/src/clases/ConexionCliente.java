@@ -86,6 +86,7 @@ public class ConexionCliente extends Thread {
         System.out.println("Tamaño de bytes de llave: " + msj.getLlavePublica().length);
         
         boolean resultado = false;
+        boolean resultado2 = false;
         
         if (msj.getHayAdjunto()){
             if (IntegridadInformacion.validezDelArchivo(msj.getDatos(), msj.getMd5Checksum())){
@@ -93,11 +94,11 @@ public class ConexionCliente extends Thread {
                 System.out.println("Los checksum son igaules, archivo recibido de manera correcta");
             }
         }
-        
-        resultado = FirmaDigital.comprobarFirmaDigital(msj.getDatosFirmados()
+        System.out.println("Comprobando firma digital");
+        resultado2 = FirmaDigital.comprobarFirmaDigital(msj.getDatosFirmados()
                 , msj.getLlavePublica(), msj.getFirmaDigital());
         
-        if (resultado){
+        if (resultado && resultado2){
             System.out.println("Paso la prueba de la firma digital, datos intactos!!");
             this.padre.tablaCorreos.insertarCorreo(msj);
         }
